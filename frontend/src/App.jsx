@@ -6,12 +6,20 @@ import './App.css'
 function App() {
   const [count, setCount] = useState(0)
   const [text, setText] = useState('Nothing')
+  const [oscarText, setOscarText] = useState('Nothing')
 
   useEffect(() => {
     console.log("useEffect called");
     fetch(`https://swapi.dev/api/people/1/`)
       .then((response) => response.json())
       .then((data) => setText(data));
+  }, []);
+
+  useEffect(() => {
+    console.log("useEffect called for Oscar");
+    fetch(`http://localhost:8000/clothing_app/`)
+      .then((response) => response.json())
+      .then((data) => setOscarText(data));
   }, []);
 
   return (
@@ -34,6 +42,9 @@ function App() {
         </p>
         <p>
           Call to api returned: {JSON.stringify(text, null, 2)}
+        </p>
+        <p>
+          Call to Oscar's api returned: {JSON.stringify(oscarText, null, 2)}
         </p>
       </div>
       <p className="read-the-docs">
