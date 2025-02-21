@@ -1,0 +1,14 @@
+# Fetching the latest node image on alpine linux
+FROM node:alpine AS development
+
+WORKDIR /app
+
+COPY package.json .
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 8080
+
+CMD [ "npm", "run", "dev" ]
