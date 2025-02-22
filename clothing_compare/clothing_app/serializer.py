@@ -1,7 +1,12 @@
 from rest_framework import serializers
 from . models import *
 
-class ReactSerializer(serializers.ModelSerializer):
+class Clothing_detail_Serializer(serializers.ModelSerializer):
     class Meta:
-        model = React
-        fields = ['name', 'detail']
+        model = Clothing_detail
+        fields = ['clothing_id', 'name', 'price_currency', 'price_current', 'link', 'brand']
+
+class User_clothing_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = User_clothing
+        fields = ['user', 'image_string']

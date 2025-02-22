@@ -1,20 +1,51 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from . models import *
 from rest_framework.response import Response
 from . serializer import *
-# Create your views here.
+from . models import *
 
-class ReactView(APIView):
+## Index, get all clothes in DB
+class Index(APIView):
   
-    serializer_class = ReactSerializer
+    serializer_class = Clothing_detail_Serializer
 
+    ## List all clothes
     def get(self, request):
-        detail = [ {"name": detail.name,"detail": detail.detail} for detail in React.objects.all()]
+        detail = [ {
+            "id": detail.clothing_id,
+            "name": detail.name,
+            "price_currency": detail.price_currency,
+            "price_current": detail.price_current,
+            "link": detail.link,
+            "brand": detail.brand } 
+            for detail in Clothing_detail.objects.all()]
         return Response(detail)
 
+    ## Post a clothing
     def post(self, request):
-        serializer = ReactSerializer(data=request.data)
+        serializer = Clothing_detail_Serializer(data=request.data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+
+## User clothing (images uploaded by them)
+class UserClothing(APIView):
+  
+    serializer_class = User_clothing_Serializer
+
+    ## List all clothes images uploaded by a specific user
+    def get(self, request, username):
+        user_uploaded_images = [ {
+            "id": clothing.id,
+            "user": clothing.user, 
+            "image_string": clothing.image_string
+            } 
+            for clothing in User_clothing.objects.filter(user=username)]
+        return Response(user_uploaded_images)
+
+    ## Upload an image
+    def post(self, request, username):
+        serializer = User_clothing_Serializer(data=request.data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
