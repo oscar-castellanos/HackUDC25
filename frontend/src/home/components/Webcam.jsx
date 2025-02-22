@@ -17,7 +17,7 @@ const aspectRatios = {
   },
 };
 
-const Webcam = ({ setCapturedImage, type = "landscape"}) => {
+const Webcam = ({ setCapturedImage}) => {
 
   const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
 
@@ -46,7 +46,9 @@ const Webcam = ({ setCapturedImage, type = "landscape"}) => {
 
   const { height, width } = useWindowDimensions();
 
-  function calculateDimensions(type, width, height) {
+  function calculateDimensions(width, height) {
+
+    const type = width > height ? "landscape" : "portrait";
   
     const w_factor = (width * 0.8) / aspectRatios[type].width;
     const h_factor = (height * 0.8) / aspectRatios[type].height;
@@ -69,7 +71,7 @@ const Webcam = ({ setCapturedImage, type = "landscape"}) => {
           screenshotFormat="image/jpeg"
           videoConstraints={{
             facingMode: "user",
-            ...calculateDimensions(type, width, height),
+            ...calculateDimensions(width, height),
           }}
         >
         {({ getScreenshot }) => (
