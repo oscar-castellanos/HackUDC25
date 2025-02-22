@@ -282,7 +282,7 @@ class OllamaLLM(metaclass=Singleton):
     
     def get_keywords(self, prompt):
         system_string = f"""
-        You are a keyword generator that takes the relevant words from a prompt and generates a list of keywords.
+        You are a keyword generator that takes the relevant words from a prompt and generates a list of the 2 most relevant keywords.
         These keywords must be relevant for the search of a product in a fashion store.
         The keywords must be returned separated by commas and you must not return anything else other than the keywords.
         The keywords must be in english despite the prompt being in a different language.
@@ -290,6 +290,7 @@ class OllamaLLM(metaclass=Singleton):
         You must highlight the style that the person wants in their fashion.
         It's very important that you try to pick up the colors that they want and the materials.
         Try to simplify the keywords and avoid using too many technical terms.
+        You cannot use more than 2 keywords. It's important that you only return the most relevant ones.	
         Examples:
         - If the person wants a casual outfit, you should return the word "casual".
         - If the person wants a dress with a floral pattern, you should return the words "dress, floral pattern".
@@ -297,7 +298,7 @@ class OllamaLLM(metaclass=Singleton):
         - If the person wants a pair of obsidian shoes, you should return the word "black shoes".
         - If the person wants a pair of shoes with a high heel, you should return the words "high heel shoes".
         You must follow the provided return format:
-        "keyword1, keyword2, keywordN"
+        "keyword1, keyword2"
         """
         response = self.generate_text(prompt, system_string)
         
