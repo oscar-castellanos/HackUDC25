@@ -5,6 +5,7 @@ import { Home } from '../../home';
 import { CompareCloths } from '../../compare';
 import Favorites from './Favorites';
 import Historial from './Historial';
+import { OutfitSearch } from '../../search';
 
 const Body = () => {
 
@@ -16,6 +17,7 @@ const Body = () => {
       <Routes>
         <Route path="/" element={<Home imageURL={imageURL} setImageURL={setImageURL} userName={userName}/>} />
         <Route path="/compare" element={<CompareCloths clothImageURL={imageURL}/>} />
+        <Route path="/search" element={<OutfitSearch/>} />
         <Route path="/favorites" element={<Favorites/>} />
         <Route path="/historial" element={<Historial/>} />
       </Routes>

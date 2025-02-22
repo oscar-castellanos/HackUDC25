@@ -168,7 +168,7 @@ const Main = ({imageURL, setImageURL, userName}) => {
               </Button>
           </Col>
           <Col>
-              <Button onClick={() => {navigate("/compare")}} variant="primary">
+              <Button onClick={() => {navigate("/search")}} variant="primary">
                 Recomend me a new outfit
               </Button>
           </Col>
@@ -188,7 +188,7 @@ const Main = ({imageURL, setImageURL, userName}) => {
               </Button>
           </Col>
           <Col>
-              <Button onClick={() => {navigate("/compare")}} variant="primary">
+              <Button onClick={() => {navigate("/search")}} variant="primary">
                 Recomend me a new outfit
               </Button>
           </Col>
