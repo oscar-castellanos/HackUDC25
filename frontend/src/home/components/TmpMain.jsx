@@ -3,6 +3,7 @@ import Webcam from './Webcam';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 
 const TmpMain = () => {
   const [capturedImage, setCapturedImage] = useState(null);
@@ -54,6 +55,20 @@ const TmpMain = () => {
               )}
           </Col>
         </Row>
+        {capturedImage && (
+        <Row>
+          <Col>
+              <Button onClick={() => {}} variant="primary">
+                Compare fabric
+              </Button>
+          </Col>
+          <Col>
+              <Button onClick={() => setCapturedImage(null)} variant="danger">
+                Take new Image
+              </Button>
+          </Col>
+        </Row>
+        )}
         <Row>
           <Col>
               {capturedImage && (
