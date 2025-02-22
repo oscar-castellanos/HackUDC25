@@ -5,6 +5,8 @@ services:
       - "8000:8000"
     volumes:
       - ./clothing_compare:/app
+    env_file:
+      "apikeys.env"
   frontend:
     build: 
       context: frontend
