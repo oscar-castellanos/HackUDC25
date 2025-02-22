@@ -27,7 +27,7 @@ class OllamaLLM(metaclass=Singleton):
         self.__model = model
         self.__visual_model = visual_model
         self.__ollama = ollama.Client(
-            host="http://localhost:11434",
+            host="http://ollama:11434",
         )
         # Preload selected models (already done in docker compose setup)
         # self.download_ollama_model(self.__model)
