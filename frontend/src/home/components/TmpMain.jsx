@@ -6,6 +6,7 @@ import Col from 'react-bootstrap/Col';
 
 const TmpMain = () => {
   const [capturedImage, setCapturedImage] = useState(null);
+  const [imageURL, setImageURL] = useState(null);
 
   console.log("TmpMain called");
   // When the capturedImage changes
@@ -24,7 +25,11 @@ const TmpMain = () => {
                                 image_string: capturedImage}),
       })
         .then((response) => response.json())
-        .then((data) => console.log(data));
+        .then((data) => {
+          console.log('Success:', data);
+          if (data.image_url)
+            setImageURL(data.image_url);
+        });
     }
   }
   , [capturedImage]);
@@ -93,6 +98,13 @@ const TmpMain = () => {
                     (capturedImage.length * 3) /
                     (4 * 1024 * 1024)
                   ).toFixed(2)} MB
+                </p>
+              )}
+          </Col>
+          <Col>
+              {imageId && (
+                <p>
+                  Captured Image Id = {imageURL}
                 </p>
               )}
           </Col>
