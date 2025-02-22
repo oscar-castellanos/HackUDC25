@@ -27,7 +27,7 @@ class OllamaLLM(metaclass=Singleton):
         self.__model = model
         self.__visual_model = visual_model
         self.__ollama = ollama.Client(
-            host="http://ollama:11434",
+            host="http://localhost:11434",
         )
         # Preload selected models (already done in docker compose setup)
         # self.download_ollama_model(self.__model)
@@ -280,6 +280,29 @@ class OllamaLLM(metaclass=Singleton):
         response = self.__ollama.chat(model=self.__visual_model, messages=messages, stream=False)
         return response.message.content
     
+    def get_keywords(self, prompt):
+        system_string = f"""
+        You are a keyword generator that takes the relevant words from a prompt and generates a list of keywords.
+        These keywords must be relevant for the search of a product in a fashion store.
+        The keywords must be returned separated by commas and you must not return anything else other than the keywords.
+        The keywords must be in english despite the prompt being in a different language.
+        The keywords must all be relevant and related to the fashion style of the message.
+        You must highlight the style that the person wants in their fashion.
+        It's very important that you try to pick up the colors that they want and the materials.
+        Try to simplify the keywords and avoid using too many technical terms.
+        Examples:
+        - If the person wants a casual outfit, you should return the word "casual".
+        - If the person wants a dress with a floral pattern, you should return the words "dress, floral pattern".
+        - If the person wants a pair of jeans made from cotton, you should return the word "jeans cotton".
+        - If the person wants a pair of obsidian shoes, you should return the word "black shoes".
+        - If the person wants a pair of shoes with a high heel, you should return the words "high heel shoes".
+        You must follow the provided return format:
+        "keyword1, keyword2, keywordN"
+        """
+        response = self.generate_text(prompt, system_string)
+        print(response)
+        
+    
 #if __name__ == '__main__':
     # Example usage of the describe outfit function
     # ollama_llm = OllamaLLM()
@@ -288,9 +311,13 @@ class OllamaLLM(metaclass=Singleton):
 
     # print(outfit_description)
 
-    ## Example usage of the generate outfit function
-    # ollama_llm = OllamaLLM()
+    # Example usage of the generate outfit function
+    #ollama_llm = OllamaLLM()
     # outfit_json, original_prompt = ollama_llm.generate_outfit("Relaxed fit shirt made of a viscose and cotton blend fabric. Camp collar and short sleeves. Button-up front.", "black")
     
     # pprint(outfit_json)
     # print(original_prompt)
+    #ollama_llm.get_keywords("I want a floral dress with a pink color and summer vibes and made from cotton")
+    
+    
+    

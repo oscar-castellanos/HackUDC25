@@ -11,4 +11,5 @@ urlpatterns = [
     path('visual_search', views.VisualSearch.as_view(), name="visual_search"),
     path('visual_search/outfit_search', views.OutfitSearch.as_view(), name="outfit_search"),
     path('visual_search/outfit_photo_search/', views.OutfitPhotoSearch.as_view(), name="outfit_photo_search"),
+    path('prompt_search', views.PromptSearch.as_view(), name="prompt_search"),
 ]

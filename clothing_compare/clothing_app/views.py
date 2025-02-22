@@ -326,3 +326,39 @@ class OutfitPhotoSearch (APIView):
             
         return Response(scrapped_outfits)
         
+
+       
+class PromptSearch (APIView):
+    
+    # Get keywords from a prompt to search correctly for suggestion with the Inditex API
+    def get(self, request):
+        
+        # Get description from the request
+        description = request.GET.get('description', "")
+        
+        # Pass the request to the Ollama API for simplification
+        ol = ollama_llm.OllamaLLM()
+        keywords = ol.get_keywords(description)
+        
+        # Get the suggested products from inditex API
+        suggested_products = product_finder.product_finder(keywords)
+        
+        #Scrape extra data
+        full_data = [scraper.get_info(result) for result in suggested_products]
+        
+        detail = [ {
+            "id": detail.clothing_id,
+            "name": detail.name,
+            "price_currency": detail.price_currency,
+            "price_current": detail.price_current,
+            "price_original": detail.price_original,
+            "link": detail.link,
+            "brand": detail.brand,
+            "color": detail.color,
+            "description": detail.description,
+            "composition": detail.composition,
+            "image_url": detail.image_url,
+            "score": detail.score }
+            for detail in full_data]
+        
+        return Response(detail)
