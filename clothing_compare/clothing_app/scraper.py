@@ -120,10 +120,7 @@ def get_materials_zara(tags):
         for material in materials:
             # Split the material by percentage
             material = material.strip()
-            i = material.find("%")
-            # Get the percentage and the material name
-            percentage = material[i-2:i]
-            material_name = material[i+1:]
+            [percentage, material_name] = material.split("%")
             materials_array.append({"material": material_name.strip(), "percentage": percentage})
             
         return materials_array
