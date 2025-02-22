@@ -101,32 +101,34 @@ def parse_tags(webpage, tags, dictionary):
 def get_materials_zara(tags):
     # Zara Example : Materials: Composition: 55% viscose, 45% cotton
     # The objetive is an array of dict with each material and its percentage
-    
-    # Get the materials tag
-    materials = tags["materials"]
-    
-    if tags["materials"] == "Not found":
-        return {}
-    
-    # Take out the "Composition" word
-    materials = materials.split(":")[1]
-
-    # Split the materials by comma
-    materials = materials.split(",")
-    
-    # Create the array of dict
-    materials_array = []
-    
-    for material in materials:
-        # Split the material by percentage
-        material = material.strip()
-        i = material.find("%")
-        # Get the percentage and the material name
-        percentage = material[i-2:i]
-        material_name = material[i+1:]
-        materials_array.append({"material": material_name.strip(), "percentage": percentage})
+    try:
+        # Get the materials tag
+        materials = tags["materials"]
         
-    return materials_array
+        if tags["materials"] == "Not found":
+            return {}
+        
+        # Take out the "Composition" word
+        materials = materials.split(":")[1]
+
+        # Split the materials by comma
+        materials = materials.split(",")
+        
+        # Create the array of dict
+        materials_array = []
+        
+        for material in materials:
+            # Split the material by percentage
+            material = material.strip()
+            i = material.find("%")
+            # Get the percentage and the material name
+            percentage = material[i-2:i]
+            material_name = material[i+1:]
+            materials_array.append({"material": material_name.strip(), "percentage": percentage})
+            
+        return materials_array
+    except:
+        return {}
         
 def get_color_zara(tags):
     # Zara Example Black | 1618/475/800
