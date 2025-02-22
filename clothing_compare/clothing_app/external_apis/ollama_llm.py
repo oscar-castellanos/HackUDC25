@@ -26,9 +26,9 @@ class OllamaLLM(metaclass=Singleton):
     def __init__(self, model = OLLAMA_MODEL, visual_model = VISUAL_MODEL):
         self.__model = model
         self.__visual_model = visual_model
-        # Preload selected models
-        self.download_ollama_model(self.__model)
-        self.download_ollama_model(self.__visual_model)
+        # Preload selected models (already done in docker compose setup)
+        # self.download_ollama_model(self.__model)
+        # self.download_ollama_model(self.__visual_model)
         
     def __parse_outfit(self, outfit):
         """
@@ -79,14 +79,14 @@ class OllamaLLM(metaclass=Singleton):
         return outfit_list, originalPrompt
 
     # Download selected model if not existing
-    def download_ollama_model(self, selected_model):
-        model_found = False
-        for model in ollama.list()['models']:
-            if selected_model in model['model']:
-                model_found = True
-                break
-        if not model_found:
-            ollama.pull(selected_model)
+    # def download_ollama_model(self, selected_model):
+    #     model_found = False
+    #     for model in ollama.list()['models']:
+    #         if selected_model in model['model']:
+    #             model_found = True
+    #             break
+    #     if not model_found:
+    #         ollama.pull(selected_model)
 
     # Generate text from a prompt (and optional previous context from system prompt)
     def generate_text(self, prompt, system_prompt = None):

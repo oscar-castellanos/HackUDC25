@@ -22,6 +22,8 @@ services:
     volumes:
       - ./model_data/ollama:/root/.ollama
     restart: unless-stopped
+    post_start:
+      - command: ["sh", "-c", "ollama pull llama3.2:3b && ollama pull llava:7b"]
     # Enable GPU support
     # deploy:
     #       resources:
