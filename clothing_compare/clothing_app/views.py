@@ -187,7 +187,22 @@ class OutfitSearch(APIView):
                     scrapped_parts.append({key:originalRequest})
                 try:
                     piece_found = product_finder.product_finder(outfit_parts[key]["Name"])[0]
-                    scrapped_parts.append({key:scraper.get_info(piece_found)})
+                    scrapped_object = scraper.get_info(piece_found)
+                    scrapped_detail = {
+                        "id": scrapped_object.clothing_id,
+                        "name": scrapped_object.name,
+                        "price_currency": scrapped_object.price_currency,
+                        "price_current": scrapped_object.price_current,
+                        "price_original": scrapped_object.price_original,
+                        "link": scrapped_object.link,
+                        "brand": scrapped_object.brand,
+                        "color": scrapped_object.color,
+                        "description": scrapped_object.description,
+                        "composition": scrapped_object.composition,
+                        "image_url": scrapped_object.image_url,
+                        "score": scrapped_object.score
+                    }
+                    scrapped_parts.append({key: scrapped_detail})
                 except:
                     # TODO: If it fails, it should do something...
                     scrapped_parts.append({key:outfit_parts[key]})
