@@ -11,6 +11,8 @@ Currently, two official plugins are available:
 
 Let's assume you need sudo to run docker commands.
 
+Also you have the conda env hackUDC25 that u can activate to run locally.
+
 ### Dev environment
 
 Let's assume u are in the `frontend/` folder.
@@ -29,3 +31,17 @@ Let's assume u are in the `frontend/` folder.
   ```bash
   sudo docker stop $(sudo docker ps -a -q)
   ```
+
+## Run full set-up
+
+From the root folder, run the following commands to rebuild the services:
+
+```bash
+sudo docker compose up -d --build frontend backend
+```
+
+And take it down with the following command:
+
+```bash
+sudo docker compose down
+```
