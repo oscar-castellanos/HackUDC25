@@ -262,11 +262,26 @@ class OutfitSearch(APIView):
                     scrapped_parts.append(scrapped_detail)
                 except:
                     # TODO: If it fails, it should do something...
-                    aux = scrapped_parts.copy()
-                    aux2 = dict()
-                    for k in aux[key]: aux2[k] = aux[key][k]
-                    aux2['category'] = key
-                    scrapped_parts.append(aux2)
+                    # aux = outfit_parts.copy()
+                    # aux2 = dict()
+                    # for k in aux[key]: aux2[k] = aux[key][k]
+                    # aux2['category'] = key
+                    scrapped_detail = {
+                        "id": "-1",
+                        "name": outfit_parts[key]['Name'],
+                        "price_currency": "",
+                        "price_current": "",
+                        "price_original": "",
+                        "link": "",
+                        "brand": "",
+                        "color": "",
+                        "description": outfit_parts[key]['Description'],
+                        "composition": "",
+                        "image_url": "",
+                        "score": "",
+                        "category": key
+                    }
+                    scrapped_parts.append(scrapped_detail)
             scrapped_outfits.append({"description": outfit["description"], "outfit_parts": scrapped_parts})
         
         return Response(scrapped_outfits) 
