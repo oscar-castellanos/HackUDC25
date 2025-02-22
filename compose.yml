@@ -6,7 +6,7 @@ services:
     volumes:
       - ./clothing_compare:/app
     env_file:
-      "apikeys.env"
+      ".apikeys.env"
   frontend:
     build: 
       context: frontend
