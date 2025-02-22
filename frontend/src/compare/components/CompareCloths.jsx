@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { ClothingList } from '../../common';
 import Spinner from 'react-bootstrap/Spinner';
 import { OutfitSearch } from '../../search';
+import Container from 'react-bootstrap/esm/Container';
+import { ReactTyped } from 'react-typed';
 
 
 const CompareCloths = ({clothImageURL}) => {
@@ -10,6 +12,7 @@ const CompareCloths = ({clothImageURL}) => {
 
   const [clothData, setClothData] = useState(null);
   const [currentClothingDetail, setCurrentClothingDetail] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     if (!clothImageURL) {
@@ -25,7 +28,18 @@ const CompareCloths = ({clothImageURL}) => {
       .then((response) => {console.log("Status:", response.status); return response.json()})
       .then((data) => {
         console.log('Success:', data);
-        setClothData(data);
+        console.log('clothData:', clothData);
+        if (data) {
+          if (data.length === 0){
+            setIsLoading(false);
+            return;
+          }
+          if (clothData && data.length < clothData.length){
+            return;
+          }
+          setClothData(data);
+          setIsLoading(false);
+        }
       });
   }, []);
 
@@ -33,10 +47,18 @@ const CompareCloths = ({clothImageURL}) => {
 
   return (
     <>
-      <h2>CompareCloths with URL = {clothImageURL}</h2>
-      {!clothData && (
+      <Container fluid className='text-center'>
+      <h2>
+        {isLoading ? <ReactTyped strings={["Loading...", "Please wait...", "Getting things ready...", "Almost there...", "Processing..."]} typeSpeed={30} showCursor={false} loop/> : `Comparation ready!`}
+        </h2>
+      </Container>
+      {!clothData && isLoading && (
           <Spinner style={{position: 'absolute', top: '50%', left: '50%', width: '5rem', height: '5rem'}} animation="border" />
         )}
+      {(!clothData && !isLoading) && (
+        <Container fluid className='text-center'>
+        <h3>No clothing found for the current image!</h3>
+        </Container>)}  
       {(clothData && !currentClothingDetail)  && (
         <ClothingList clothing={clothData} setCurrentClothingDetail={setCurrentClothingDetail}/>
       )}

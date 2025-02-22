@@ -105,12 +105,12 @@ const Main = ({imageURL, setImageURL, userName, prompt, setPrompt}) => {
           <Row xxs={1} xs={1} sm={1} md={1} lg={1}>
             <Col>
               <h4 className="mt-5 mb-3" style={{textAlign: "center"}}>
-                <ReactTyped strings={["Start by"]} typeSpeed={50} showCursor={false}/>
+                <ReactTyped strings={["Start taking a photo"]} typeSpeed={50} showCursor={false}/>
               </h4>
             </Col>
             <Col>
                 <Button style={{display: "flex", textAlign: "center"}} size="lg" onClick={() => setIsStarted(true)} variant="primary">
-                  📷 Taking a photo
+                  Start 📷  
                 </Button>
             </Col>
             <Col>

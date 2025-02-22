@@ -5,10 +5,10 @@ import ClothingCard from "./ClothingCard";
 
 const ClothingList = ({ clothing, setCurrentClothingDetail}) => {
   return (
-    <Container>
-      <Row>
+    <Container fluid>
+      <Row xxs={1} xs={1} sm={1} md={2} lg={5} className="mx-auto">
         {clothing.map((cloth, index) => (
-          <Col key={index} xs={12} md={4} lg={3}>
+          <Col key={index} className={"px-3"}>
             <ClothingCard key={index} clothing={cloth} setCurrentClothingDetail={setCurrentClothingDetail} />
           </Col>
         ))}
