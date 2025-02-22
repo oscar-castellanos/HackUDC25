@@ -275,7 +275,7 @@ class OutfitSearch(APIView):
                         "link": "",
                         "brand": "",
                         "color": "",
-                        "description": outfit_parts[key]['Description'],
+                        "description": outfit_parts[key]['Description'] if 'Description' in outfit_parts[key] else "",
                         "composition": "",
                         "image_url": "",
                         "score": "",
