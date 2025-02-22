@@ -13,3 +13,18 @@ services:
       - "8080:8080"
     volumes:
       - ./frontend/src:/app/src
+  ollama:
+    image: ollama/ollama:latest
+    ports:
+      - "11434:11434"
+    volumes:
+      - ./model_data/ollama:/root/.ollama
+    restart: unless-stopped
+    # Enable GPU support
+    # deploy:
+    #       resources:
+    #         reservations:
+    #           devices:
+    #             - driver: nvidia
+    #               count: 1
+    #               capabilities: [gpu]
