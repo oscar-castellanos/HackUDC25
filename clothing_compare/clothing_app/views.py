@@ -5,7 +5,7 @@ from rest_framework import status
 from . serializer import *
 from . models import *
 
-from . external_apis import product_finder
+from .external_apis import visual_finder
 
 ## Aux methods:
 def getImageUrl(image_url):
@@ -104,5 +104,5 @@ class VisualSearch(APIView):
         image_url = request.data['image_url']
 
         ## Use image_url to pull from Visual Search
-        found_extra_data = product_finder.product_finder(image_url)
+        found_extra_data = visual_finder.visual_finder(image_url)
         return Response(found_extra_data)
