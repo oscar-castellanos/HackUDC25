@@ -1,5 +1,7 @@
 FROM python:3.10-alpine
 
+WORKDIR /app
+
 COPY requirements.txt requirements.txt
 COPY start_server.sh start_server.sh
 

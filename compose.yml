@@ -3,9 +3,13 @@ services:
     build: clothing_compare
     ports:
       - "8000:8000"
+    volumes:
+      - ./clothing_compare:/app
   frontend:
     build: 
       context: frontend
       dockerfile: Dockerfile.front.dev
     ports:
       - "8080:8080"
+    volumes:
+      - ./frontend/src:/app/src
