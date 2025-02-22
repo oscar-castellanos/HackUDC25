@@ -14,7 +14,7 @@ const OutfitDetails = ({ outfit }) => {
       <h2>Outfit Details</h2>
       {outfit.map((clothing, index) => (
         <>
-          <h3>{clothing.category ? JSON.stringify(clothing.category, null, 2) : `Piece N.${index}`}</h3>
+          <h3 key={index+10000}>{clothing.category ? JSON.stringify(clothing.category, null, 2) : `Piece N.${index}`}</h3>
           <ClothingDetails key={index} clothing={clothing} />
         </>
       ))}

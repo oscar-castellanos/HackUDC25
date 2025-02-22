@@ -9,7 +9,7 @@ const ClothingList = ({ clothing, setCurrentClothingDetail}) => {
       <Row>
         {clothing.map((cloth, index) => (
           <Col key={index} xs={12} md={4} lg={3}>
-            <ClothingCard clothing={cloth} setCurrentClothingDetail={setCurrentClothingDetail} />
+            <ClothingCard key={index} clothing={cloth} setCurrentClothingDetail={setCurrentClothingDetail} />
           </Col>
         ))}
       </Row>
