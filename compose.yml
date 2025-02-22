@@ -17,6 +17,7 @@ services:
       - ./frontend/src:/app/src
   ollama:
     image: ollama/ollama:latest
+    # Expose ollama port for debugging
     ports:
       - "11434:11434"
     volumes:
