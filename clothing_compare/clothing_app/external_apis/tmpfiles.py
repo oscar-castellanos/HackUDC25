@@ -2,6 +2,9 @@ import requests
 import urllib
 import base64
 
+def remove_mime_base64(base64data):
+    return base64data.split(",")[1]
+
 def upload_local_file_to_web(file_path, file_name="image.jpg"):
     # Forward file to tmpfiles
     url = 'https://tmpfiles.org/api/v1/upload'
@@ -22,6 +25,10 @@ def upload_local_file_to_web(file_path, file_name="image.jpg"):
     return direct_link
 
 def upload_base64_file_to_web(base64data, file_name="image.jpg"):
+    # Remove mime type header carried over from frontend
+    # Example: data:image/jpeg;base64,<pure_image_data>
+    base64data = remove_mime_base64(base64data)
+
     # Forward file to tmpfiles
     url = 'https://tmpfiles.org/api/v1/upload'
     filedata = base64.b64decode(base64data)

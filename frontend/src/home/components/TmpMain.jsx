@@ -4,10 +4,13 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
+import { useNavigate } from 'react-router-dom';
 
-const TmpMain = () => {
+const TmpMain = ({imageURL, setImageURL, userName}) => {
   const [capturedImage, setCapturedImage] = useState(null);
-  const [imageURL, setImageURL] = useState(null);
+
+
+  const navigate = useNavigate();
 
   console.log("TmpMain called");
   // When the capturedImage changes
@@ -17,12 +20,13 @@ const TmpMain = () => {
     console.log("useEffect called");
     if (capturedImage) {
       console.log("Captured image changed");
-      fetch('http://localhost:8000/clothing_app/user_clothing/Oscar', {
+      console.log("Captured image: ", capturedImage);
+      fetch(`http://localhost:8000/clothing_app/user_clothing/${userName}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ user: "Oscar",
+        body: JSON.stringify({ user: userName,
                                 image_string: capturedImage}),
       })
         .then((response) => response.json())
@@ -58,7 +62,7 @@ const TmpMain = () => {
         {capturedImage && (
         <Row>
           <Col>
-              <Button onClick={() => {}} variant="primary">
+              <Button onClick={() => {navigate("/compare")}} variant="primary">
                 Compare fabric
               </Button>
           </Col>
@@ -83,7 +87,7 @@ const TmpMain = () => {
           <Col>
               {imageURL && (
                 <p>
-                  Captured Image Id = {imageURL}
+                  Captured Image Id from {userName} = {imageURL}
                 </p>
               )}
           </Col>

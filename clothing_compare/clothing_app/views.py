@@ -5,13 +5,15 @@ from rest_framework import status
 from . serializer import *
 from . models import *
 
-from .external_apis import visual_finder
+from .external_apis import visual_finder, tmpfiles
+
+import random
+import string
 
 ## Aux methods:
-def getImageUrl(image_url):
+def getImageUrl(image_string):
 
-    ## Dummy method while we integrate the actual img upload...
-    image_url = "https://static.zara.net/assets/public/5d1c/c3b3/e8064a30b197/760db88b39af/01618475800-p/01618475800-p.jpg"
+    image_url = tmpfiles.upload_base64_file_to_web(image_string, file_name="{0}.jpg".format("".join(random.choice(string.ascii_letters) for i in range(20))))
 
     return image_url
 
