@@ -1,7 +1,18 @@
 import ollama
-from pprint import pprint
+import requests
+import base64
+import pprint
 
 OLLAMA_MODEL = "llama3.2:3b"
+VISUAL_MODEL = "llava:7b"
+
+# Utility method to encode an image from a URL to base64 to pass to ollama
+def get_base64_image_from_url(image_url):
+    headers = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3"}
+    response = requests.get(image_url, headers=headers)
+    image_data = response.content
+    base64_image = base64.b64encode(image_data).decode('utf-8')
+    return base64_image
 
 # Singleton class to ensure only one instance of Ollama is created
 class Singleton(type):
@@ -12,10 +23,12 @@ class Singleton(type):
         return cls._instances[cls]
 
 class OllamaLLM(metaclass=Singleton):
-    def __init__(self, model = OLLAMA_MODEL):
+    def __init__(self, model = OLLAMA_MODEL, visual_model = VISUAL_MODEL):
         self.__model = model
-        # Preload selected model
+        self.__visual_model = visual_model
+        # Preload selected models
         self.download_ollama_model(self.__model)
+        self.download_ollama_model(self.__visual_model)
         
     def __parse_outfit(self, outfit):
         """
@@ -241,7 +254,36 @@ class OllamaLLM(metaclass=Singleton):
         
         return outfits, originalPrompt
     
-# if __name__ == '__main__':
+    # Generate an outfit description from a given image
+    def describe_outfit_from_image(self, image_url):
+        image = get_base64_image_from_url(image_url)
+        if image is None:
+            return None
+        system_prompt = f"""
+        You will be shown a stock photograph from a clothing store.
+        Describe the overall style of the clothing.
+        If it is an outfit, try to give details about the top, bottom, shoes and accessories, as well as the color.
+        If it is a separate item, describe it with as much detail as possible.
+        Describe any possible logos, and read out any visible text.
+        If there is any image or pattern stamped on the clothing, describe it.
+        If possible, give extra information about the color palette used, the tonality, the color combinations and how it fits the overall style.
+        Try to generate tags about the style, such as flashy, discrete, sharp, edgy, formal, etc...
+        Name the strongest or predominant colors found on the image.
+        Try to differentiate between conflicting colors, and give a general idea of the color harmony.
+        If any of this information is not visible exclude the explanation from the output.
+        Keep it concise.
+        """
+        messages = [{'role': 'user', 'content': system_prompt, 'images': [image]}]
+        response = ollama.chat(model=self.__visual_model, messages=messages, stream=False)
+        return response.message.content
+    
+#if __name__ == '__main__':
+    # Example usage of the describe outfit function
+    # ollama_llm = OllamaLLM()
+    # image_url = "https://static.zara.net/assets/public/6c3e/9033/ddf64d36a0bf/8ee8d1feeee6/06085303098-a1/06085303098-a1.jpg?ts=1736349686062&w=1024"
+    # outfit_description = ollama_llm.describe_outfit_from_image(image_url)
+
+    # print(outfit_description)
 
     ## Example usage of the generate outfit function
     # ollama_llm = OllamaLLM()
