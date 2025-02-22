@@ -37,19 +37,19 @@ class OllamaLLM(metaclass=Singleton):
             current_outfit = {}
             outfit_lines = outfit.split("\n")
             current_outfit["description"] = outfit_lines[1].strip()
-            outfit_description = outfit_lines[1].strip()
+            current_outfit["outfit_parts"] = {}
             current_part_of_outfit = ""
             for line in outfit_lines[2:]:
                 if line.strip() == "":
                     continue
                 if line.strip()[0] == "*":
                     current_part_of_outfit = line.strip()[1:].split(":")[0].strip()
-                    current_outfit[current_part_of_outfit] = {"name": line.strip()[1:].split(":")[1].strip()}
+                    current_outfit["outfit_parts"][current_part_of_outfit] = {"Name": line.strip()[1:].split(":")[1].strip()}
                 if line.strip()[0] == "+":
                     line = line.strip()[1:]
                     if len(line.split(":")) == 1:
                         continue
-                    current_outfit[current_part_of_outfit][line.strip().split(":")[0].strip()] = line.strip().split(":")[1].strip()
+                    current_outfit["outfit_parts"][current_part_of_outfit][line.strip().split(":")[0].strip()] = line.strip().split(":")[1].strip()
                     ##current_outfit[current_part_of_outfit][line.strip().split(":")[0].strip()] = line.strip().split(":")[1].strip()
                 else:
                     continue
@@ -59,11 +59,10 @@ class OllamaLLM(metaclass=Singleton):
         base_outfit = outfit_list[0]
         # The original prompt will not have Category
         originalPrompt = None
-        for key in base_outfit.keys():
-            if key != "description":
-                if base_outfit[key].get("Category") is None:
-                    originalPrompt = key
-                    break
+        for key in base_outfit["outfit_parts"].keys():
+            if base_outfit["outfit_parts"][key].get("Category") is None:
+                originalPrompt = key
+                break
         return outfit_list, originalPrompt
 
     # Download selected model if not existing
