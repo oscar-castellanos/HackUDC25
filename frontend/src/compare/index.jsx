@@ -1,0 +1,1 @@
+export {default as CompareCloths} from './components/CompareCloths';
