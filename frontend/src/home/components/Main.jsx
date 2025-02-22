@@ -7,6 +7,7 @@ import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import { useNavigate } from 'react-router-dom';
 import { ReactTyped } from 'react-typed';
+import Fade from 'react-bootstrap/Fade';
 
 const Main = ({imageURL, setImageURL, userName}) => {
   const [prompt, setPrompt] = useState("");
@@ -89,55 +90,62 @@ const Main = ({imageURL, setImageURL, userName}) => {
         {!isStarted && (
         <Row>
           <Col>
-            <h1>
-              Welcome to MY COOL APP NAME
-            </h1>
+            <h3 class="mt-3 mb-5" style={{textAlign: "center"}}>
+              Welcome to
+            </h3>
+            <Fade in={true} appear={true}>
+              <h1 class="mt-3 mb-3" style={{textAlign: "center"}}>
+                MY COOL APP NAME
+              </h1>
+            </Fade>
           </Col>
         </Row>
         )}
         {!isStarted && (
-        <Row xxs={1} xs={1} sm={1} md={1} lg={1}>
-          <Col>
-            <h2>
-              <ReactTyped strings={["Start by taking a photo"]} typeSpeed={50} showCursor={false}/>
-            </h2>
-          </Col>
-          <Col>
-              <Button onClick={() => setIsStarted(true)} variant="primary">
-                Start 📷
-              </Button>
-          </Col>
-          <Col>
-            <h2>
-              Or {isHidden ? ". . .": (<ReactTyped strings={["uploading a picture of a cool outfit"]} typeSpeed={50} showCursor={false}/>)}
-            </h2>
-          </Col>
-          <Col>
-            <Form onSubmit={startFromFile}>
-            <Form.Group controlId="formFile">
-              <Form.Control type="file" size="lg" accept="image/*" />
-            </Form.Group>
-            <Button variant="primary" type="submit">
-              Start  📁
-            </Button>
-            </Form>
-          </Col>
-          <Col>
-            <h2>
-              Or {isDoubleHidden ? ". . .": (<ReactTyped strings={["writing a prompt with a style you like "]} typeSpeed={50} showCursor={false}/>)}
-            </h2>
-          </Col>
-          <Col>
-            <Form onSubmit={startFromPrompt}>
-              <Form.Group controlId="formInputPrompt">
-                <Form.Control type="text" placeholder="I like a style with..." />
+        <div class="shadow-sm p-3 mb-5 bg-white rounded">
+          <Row xxs={1} xs={1} sm={1} md={1} lg={1}>
+            <Col>
+              <h4 class="mt-5 mb-3" style={{textAlign: "center"}}>
+                <ReactTyped strings={["Start by"]} typeSpeed={50} showCursor={false}/>
+              </h4>
+            </Col>
+            <Col>
+                <Button style={{display: "flex", "align-items": "center", textAlign: "center"}} size="lg" onClick={() => setIsStarted(true)} variant="primary">
+                  📷 Taking a photo
+                </Button>
+            </Col>
+            <Col>
+              <h4 class="mt-4" style={{textAlign: "center"}}>
+                or {isHidden ? ". . .": (<ReactTyped strings={["uploading a picture of a cool outfit"]} typeSpeed={50} showCursor={false}/>)}
+              </h4>
+            </Col>
+            <Col>
+              <Form onSubmit={startFromFile}>
+              <Form.Group controlId="formFile">
+                <Form.Control type="file" size="lg" accept="image/*" />
               </Form.Group>
-              <Button variant="primary" type="submit">
-                Start 📝
+              <Button variant="primary" type="submit" style={{align: "center", "flex-direction": "row"}} size="lg">
+                Start  📁
               </Button>
-            </Form>
-          </Col>
-        </Row>
+              </Form>
+            </Col>
+            <Col>
+              <h4 class ="mt-4" style={{textAlign: "center"}}>
+                or {isDoubleHidden ? ". . .": (<ReactTyped strings={["describing a style you like"]} typeSpeed={50} showCursor={false}/>)}
+              </h4>
+            </Col>
+            <Col>
+              <Form onSubmit={startFromPrompt}>
+                <Form.Group controlId="formInputPrompt">
+                  <Form.Control type="text" placeholder="I'm looking for an outfit with..." />
+                </Form.Group>
+                <Button variant="primary" type="submit" size="lg">
+                  Start 📝
+                </Button>
+              </Form>
+            </Col>
+          </Row>
+        </div>
         )}
         {isStarted && infoType === 'image' && (
         <>
