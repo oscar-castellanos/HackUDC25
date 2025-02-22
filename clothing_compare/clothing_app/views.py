@@ -331,10 +331,11 @@ class OutfitPhotoSearch (APIView):
 class PromptSearch (APIView):
     
     # Get keywords from a prompt to search correctly for suggestion with the Inditex API
-    def get(self, request):
-        
+    def post(self, request):
+        # Get the data from the request
+        data = request.data.copy()
         # Get description from the request
-        description = request.GET.get('description', "")
+        description = data['description']
         
         # Pass the request to the Ollama API for simplification
         ol = ollama_llm.OllamaLLM()
