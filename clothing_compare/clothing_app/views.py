@@ -299,7 +299,8 @@ class OutfitPhotoSearch (APIView):
             scrapped_parts = []
             for key in outfit_parts.keys():
                 if key == originalPrompt:
-                    scrapped_parts.append({key:prompt})
+                    originalRequest['category': key]
+                    scrapped_parts.append(originalRequest)
                 try:
                     piece_found = product_finder.product_finder(outfit_parts[key]["Name"])[0]
                     scrapped_object = scraper.get_info(piece_found)
@@ -315,12 +316,33 @@ class OutfitPhotoSearch (APIView):
                         "description": scrapped_object.description,
                         "composition": scrapped_object.composition,
                         "image_url": scrapped_object.image_url,
-                        "score": scrapped_object.score
+                        "score": scrapped_object.score,
+                        "category": key
                     }
-                    scrapped_parts.append({key: scrapped_detail})
+                    scrapped_parts.append(scrapped_detail)
                 except:
-                    scrapped_parts.append({key:outfit_parts[key]})
-            scrapped_outfits.append({"description": outfit["description"], "outfit_parts":scrapped_parts})
+                    # TODO: If it fails, it should do something...
+                    # aux = outfit_parts.copy()
+                    # aux2 = dict()
+                    # for k in aux[key]: aux2[k] = aux[key][k]
+                    # aux2['category'] = key
+                    scrapped_detail = {
+                        "id": "-1",
+                        "name": outfit_parts[key]['Name'],
+                        "price_currency": "",
+                        "price_current": "",
+                        "price_original": "",
+                        "link": "",
+                        "brand": "",
+                        "color": "",
+                        "description": outfit_parts[key]['Description'],
+                        "composition": "",
+                        "image_url": "",
+                        "score": "",
+                        "category": key
+                    }
+                    scrapped_parts.append(scrapped_detail)
+            scrapped_outfits.append({"description": outfit["description"], "outfit_parts": scrapped_parts})
         
         serializer = User_clothing_Serializer(data=data)
         if serializer.is_valid(raise_exception=True):
