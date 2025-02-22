@@ -211,4 +211,59 @@ class OutfitSearch(APIView):
         return Response(scrapped_outfits) 
             
         
+class OutfitPhotoSearch (APIView):
+    
+    ## Get outfit based on image
+    def post(self, request, username):
+        data = request.data.copy()
+        data['user'] = username
+        
+        ## Get image link
+        image_url = getImageUrl(data['image_string'])
+        data['image_url'] = image_url
+        
+        ## Get prompt from ollama
+        ol = ollama_llm.OllamaLLM()
+        prompt = ol.describe_outfit_from_image(image_url)
+        
+        
+        ## Get outfits from Ollama
+        outfits, originalPrompt = ol.generate_outfit(prompt)
+        
+        scrapped_outfits = []
+        
+        for outfit in outfits:
+            # Get the image url for each key in 
+            outfit_parts = outfit["outfit_parts"]
+            scrapped_parts = []
+            for key in outfit_parts.keys():
+                if key == originalPrompt:
+                    scrapped_parts.append({key:prompt})
+                try:
+                    piece_found = product_finder.product_finder(outfit_parts[key]["Name"])[0]
+                    scrapped_object = scraper.get_info(piece_found)
+                    scrapped_detail = {
+                        "id": scrapped_object.clothing_id,
+                        "name": scrapped_object.name,
+                        "price_currency": scrapped_object.price_currency,
+                        "price_current": scrapped_object.price_current,
+                        "price_original": scrapped_object.price_original,
+                        "link": scrapped_object.link,
+                        "brand": scrapped_object.brand,
+                        "color": scrapped_object.color,
+                        "description": scrapped_object.description,
+                        "composition": scrapped_object.composition,
+                        "image_url": scrapped_object.image_url,
+                        "score": scrapped_object.score
+                    }
+                    scrapped_parts.append({key: scrapped_detail})
+                except:
+                    scrapped_parts.append({key:outfit_parts[key]})
+            scrapped_outfits.append({"description": outfit["description"], "outfit_parts":scrapped_parts})
+        
+        serializer = User_clothing_Serializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
             
+        return Response(scrapped_outfits)
+        
