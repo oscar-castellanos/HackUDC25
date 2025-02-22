@@ -28,8 +28,8 @@ class Index(APIView):
             serializer.save()
             return Response(serializer.data)
 
-## User clothing (images uploaded by them)
-class UserClothing(APIView):
+## User clothings (images uploaded by them)
+class UserClothings(APIView):
   
     serializer_class = User_clothing_Serializer
 
@@ -45,7 +45,33 @@ class UserClothing(APIView):
 
     ## Upload an image
     def post(self, request, username):
-        serializer = User_clothing_Serializer(data=request.data)
+        data = request.data.copy()
+        data['user'] = username
+        serializer = User_clothing_Serializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
             return Response(serializer.data)
+
+
+## WIP
+## User clothing (single images uploaded by them)
+class UserClothing(APIView):
+
+    serializer_class = User_clothing_Serializer
+
+    ## Get a specific image uploaded by a specific user
+    def get(self, request, username, image_id):
+        clothing = User_clothing.objects.filter(user=username, id=image_id)
+        user_uploaded_images = {
+            "id": clothing.id,
+            "user": clothing.user, 
+            "image_string": clothing.image_string
+            }  
+        return Response(user_uploaded_images)
+
+    # ## Delete an image
+    # def delete(self, request, username):
+    #     serializer = User_clothing_Serializer(data=request.data)
+    #     if serializer.is_valid(raise_exception=True):
+    #         serializer.save()
+    #         return Response(serializer.data)
