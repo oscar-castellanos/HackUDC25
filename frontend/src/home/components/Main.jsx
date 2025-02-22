@@ -87,16 +87,19 @@ const Main = ({imageURL, setImageURL, userName, prompt, setPrompt}) => {
     <main>
       <Container >
         {!isStarted && (
-        <Row>
+        <Row >
           <Col>
             <h3 className="mt-3 mb-5" style={{textAlign: "center"}}>
               Welcome to
             </h3>
             <Fade in={true} appear={true}>
               <h1 className="mt-3 mb-3" style={{textAlign: "center"}}>
-                MY COOL APP NAME
+                Clothing compare
               </h1>
             </Fade>
+            <h4 className='mt-3' style={{textAlign: "center"}}>
+              Find sustaiable and skin-friendly clothing that fits your style
+            </h4>
           </Col>
         </Row>
         )}
@@ -151,7 +154,7 @@ const Main = ({imageURL, setImageURL, userName, prompt, setPrompt}) => {
               {!capturedImage && <Webcam setCapturedImage={setCapturedImage} />}
               {capturedImage && (
                 <img
-                  style={{width: "80%", display: "block", margin: "auto", padding: "20px"}}
+                  style={{height: "80%", display: "block", margin: "auto", padding: "20px"}}
                   src={capturedImage}
                   alt="Captured"
                   className="captured-image"

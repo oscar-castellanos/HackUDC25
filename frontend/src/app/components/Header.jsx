@@ -11,12 +11,12 @@ const Header = () => {
           <Navbar.Brand href="#home">
           <img
               alt=""
-              src="/vite.svg"
+              src="/logo.svg"
               width="30"
               height="30"
               className="d-inline-block align-top"
             />{' '}
-          MY COOL APP NAME
+          Clothing compare
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="basic-navbar-nav" />
           <Navbar.Collapse id="basic-navbar-nav">
