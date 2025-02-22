@@ -17,84 +17,79 @@ const aspectRatios = {
   },
 };
 
-const Webcam = ({ setCapturedImage}) => {
-
-  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+const Webcam = ({ setCapturedImage }) => {
+  const [windowDimensions, setWindowDimensions] = useState(
+    getWindowDimensions()
+  );
 
   function getWindowDimensions() {
     const { innerWidth: width, innerHeight: height } = window;
     return {
       width,
-      height
+      height,
     };
   }
-  
-   function useWindowDimensions() {
-    
-  
+
+  function useWindowDimensions() {
     useEffect(() => {
       function handleResize() {
         setWindowDimensions(getWindowDimensions());
       }
-  
-      window.addEventListener('resize', handleResize);
-      return () => window.removeEventListener('resize', handleResize);
+
+      window.addEventListener("resize", handleResize);
+      return () => window.removeEventListener("resize", handleResize);
     }, []);
-  
+
     return windowDimensions;
   }
 
   const { height, width } = useWindowDimensions();
 
   function calculateDimensions(width, height) {
-
     const type = width > height ? "landscape" : "portrait";
-  
-    const w_factor = (width * 0.8) / aspectRatios[type].width;
-    const h_factor = (height * 0.8) / aspectRatios[type].height;
+
+    const w_factor = (width * 0.9) / aspectRatios[type].width;
+    const h_factor = (height * 0.9) / aspectRatios[type].height;
     const factor = Math.min(w_factor, h_factor, 1);
-    console.log("factor: ", factor);
-    console.log("width: ", aspectRatios[type].width * factor);
-    console.log("height: ", aspectRatios[type].height * factor);
+    //console.log("factor: ", factor);
+    //console.log("width: ", aspectRatios[type].width * factor);
+    //console.log("height: ", aspectRatios[type].height * factor);
     return {
       width: aspectRatios[type].width * factor,
       height: aspectRatios[type].height * factor,
     };
-
   }
 
-    return (
-      <Container>
-        <ReactWebcam
-          mirrored 
-          audio={false}
-          screenshotFormat="image/jpeg"
-          videoConstraints={{
-            facingMode: "user",
-            ...calculateDimensions(width, height),
-          }}
-        >
+  return (
+    <Container fluid>
+      <ReactWebcam
+        mirrored
+        audio={false}
+        screenshotFormat="image/jpeg"
+        videoConstraints={{
+          facingMode: "user",
+          ...calculateDimensions(width, height),
+        }}
+      >
         {({ getScreenshot }) => (
-
-        <Row>
-        <Col>
-        <Button
-          variant="primary" 
-          onClick={() => {
-            const imageSrc = getScreenshot();
-            setCapturedImage(imageSrc);
-            }
-          }
-        >
-          Capture photo
-        </Button>
-        </Col>
-        </Row>
+          <Row>
+            <Col>
+              <Button
+                variant="primary"
+                onClick={() => {
+                  const imageSrc = getScreenshot();
+                  setCapturedImage(imageSrc);
+                }}
+              >
+                Capture photo
+              </Button>
+            </Col>
+          </Row>
         )}
-        </ReactWebcam>
-      </Container>
-    );
-}
+      </ReactWebcam>
+    </Container>
+  );
+};
 
 export default Webcam;
     

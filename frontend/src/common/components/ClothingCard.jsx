@@ -4,7 +4,7 @@ import ProgressBar from 'react-bootstrap/ProgressBar';
 const defaultClothing = {
   name: "No name",
   brand: "No brand",
-  image: "https://static.zara.net/assets/public/5d1c/c3b3/e8064a30b197/760db88b39af/01618475800-p/01618475800-p.jpg",
+  image_url: "https://static.zara.net/assets/public/5d1c/c3b3/e8064a30b197/760db88b39af/01618475800-p/01618475800-p.jpg",
   url: "https://static.zara.net/assets/public/5d1c/c3b3/e8064a30b197/760db88b39af/01618475800-p/01618475800-p.jpg",
   currency: "$",
   current_price: "55.55",
@@ -18,7 +18,7 @@ const defaultClothing = {
 const ClothingCard = ({ clothing }) => {
   return (
     <Card>
-      <Card.Img variant="top" src={clothing.image ? clothing.image : defaultClothing.image} style={{height:"400px"}}/>
+      <Card.Img variant="top" src={clothing.image_url ? clothing.image_url : defaultClothing.image_url} style={{height:"400px"}}/>
       <Card.Body>
         <Card.Title>{clothing.name ? clothing.name : clothing.cloth_name ? clothing.cloth_name : defaultClothing.name}</Card.Title>
         <Card.Subtitle>{clothing.brand ? clothing.brand : defaultClothing.brand}</Card.Subtitle>
