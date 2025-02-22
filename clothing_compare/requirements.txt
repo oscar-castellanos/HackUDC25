@@ -2,3 +2,5 @@ django
 djangorestframework
 django-cors-headers
 ollama
+requests
+beautifulsoup4
