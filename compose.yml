@@ -1,0 +1,11 @@
+services:
+  backend:
+    build: clothing_compare
+    ports:
+      - "8000:8000"
+  frontend:
+    build: 
+      context: frontend
+      dockerfile: Dockerfile.front.dev
+    ports:
+      - "8080:8080"
