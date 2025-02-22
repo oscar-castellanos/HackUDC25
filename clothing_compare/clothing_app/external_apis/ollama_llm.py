@@ -26,6 +26,9 @@ class OllamaLLM(metaclass=Singleton):
     def __init__(self, model = OLLAMA_MODEL, visual_model = VISUAL_MODEL):
         self.__model = model
         self.__visual_model = visual_model
+        self.__ollama = ollama.Client(
+            host="http://ollama:11434",
+        )
         # Preload selected models (already done in docker compose setup)
         # self.download_ollama_model(self.__model)
         # self.download_ollama_model(self.__visual_model)
@@ -90,7 +93,7 @@ class OllamaLLM(metaclass=Singleton):
 
     # Generate text from a prompt (and optional previous context from system prompt)
     def generate_text(self, prompt, system_prompt = None):
-        response = ollama.generate(model=self.__model, system=system_prompt, stream=False, prompt=prompt)
+        response = self.__ollama.generate(model=self.__model, system=system_prompt, stream=False, prompt=prompt)
         return response.response
     
     # Generate chat response, with the context of a previous message history
@@ -106,7 +109,7 @@ class OllamaLLM(metaclass=Singleton):
             ollama_history = messages
             ollama_history += ollama_input
         
-        response = ollama.chat(model=self.__model, messages=ollama_history, stream=False)
+        response = self.__ollama.chat(model=self.__model, messages=ollama_history, stream=False)
 
         # Add response to mantain history
         ollama_history += [
@@ -274,7 +277,7 @@ class OllamaLLM(metaclass=Singleton):
         Keep it concise.
         """
         messages = [{'role': 'user', 'content': system_prompt, 'images': [image]}]
-        response = ollama.chat(model=self.__visual_model, messages=messages, stream=False)
+        response = self.__ollama.chat(model=self.__visual_model, messages=messages, stream=False)
         return response.message.content
     
 #if __name__ == '__main__':
