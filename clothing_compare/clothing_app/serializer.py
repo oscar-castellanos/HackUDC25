@@ -9,4 +9,4 @@ class Clothing_detail_Serializer(serializers.ModelSerializer):
 class User_clothing_Serializer(serializers.ModelSerializer):
     class Meta:
         model = User_clothing
-        fields = ['user', 'image_string']
+        fields = ['user', 'image_string', 'image_url']

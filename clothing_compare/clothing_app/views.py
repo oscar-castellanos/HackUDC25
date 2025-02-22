@@ -4,6 +4,17 @@ from rest_framework.response import Response
 from . serializer import *
 from . models import *
 
+import random
+import string
+
+## Aux methods:
+def getImageUrl(image_url):
+
+    ## Dummy method while we integrate the actual img upload...
+    image_url = "http://" + "".join(random.choice(string.ascii_letters) for i in range(20))
+
+    return image_url
+
 ## Index, get all clothes in DB
 class Index(APIView):
   
@@ -38,7 +49,8 @@ class UserClothings(APIView):
         user_uploaded_images = [ {
             "id": clothing.id,
             "user": clothing.user, 
-            "image_string": clothing.image_string
+            "image_string": clothing.image_string,
+            "image_url": clothing.image_url
             } 
             for clothing in User_clothing.objects.filter(user=username)]
         return Response(user_uploaded_images)
@@ -47,6 +59,11 @@ class UserClothings(APIView):
     def post(self, request, username):
         data = request.data.copy()
         data['user'] = username
+
+        ## Get url from tmpfiles
+        image_url = getImageUrl(data['image_string'])
+        data['image_url'] = image_url
+
         serializer = User_clothing_Serializer(data=data)
         if serializer.is_valid(raise_exception=True):
             serializer.save()
