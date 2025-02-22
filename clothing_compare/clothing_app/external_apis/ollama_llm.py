@@ -300,7 +300,8 @@ class OllamaLLM(metaclass=Singleton):
         "keyword1, keyword2, keywordN"
         """
         response = self.generate_text(prompt, system_string)
-        print(response)
+        
+        return response
         
     
 #if __name__ == '__main__':
