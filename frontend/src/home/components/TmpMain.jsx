@@ -34,42 +34,6 @@ const TmpMain = () => {
   }
   , [capturedImage]);
 
-  /*
-        <h1>Temp Home</h1>
-      <div className="webcam-container">
-        {!capturedImage && <Webcam setCapturedImage={setCapturedImage} />}
-        {capturedImage && (
-          <img
-            src={capturedImage}
-            alt="Captured"
-            className="captured-image"
-          />
-        )}
-      </div>
-      <div className="card">
-        {capturedImage && (
-          <div>
-            Captured Image Size = {(
-              (capturedImage.length * 3) /
-              (4 * 1024 * 1024)
-            ).toFixed(2)} MB
-          </div>
-        )}
-        {capturedImage && (
-          <pre
-            style={{
-              width: '800px',
-              whiteSpace: 'pre-wrap',
-              wordWrap: 'break-word',
-              margin: '1rem 0',
-            }}
-          >
-            {capturedImage}
-          </pre>
-        )}
-      </div>
-  */
-
   return (
     <main>
       <Container>
@@ -102,7 +66,7 @@ const TmpMain = () => {
               )}
           </Col>
           <Col>
-              {imageId && (
+              {imageURL && (
                 <p>
                   Captured Image Id = {imageURL}
                 </p>

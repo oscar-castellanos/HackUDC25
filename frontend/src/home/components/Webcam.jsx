@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 import ReactWebcam from 'react-webcam';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
@@ -17,6 +19,48 @@ const aspectRatios = {
 
 const Webcam = ({ setCapturedImage, type = "landscape"}) => {
 
+  const [windowDimensions, setWindowDimensions] = useState(getWindowDimensions());
+
+  function getWindowDimensions() {
+    const { innerWidth: width, innerHeight: height } = window;
+    return {
+      width,
+      height
+    };
+  }
+  
+   function useWindowDimensions() {
+    
+  
+    useEffect(() => {
+      function handleResize() {
+        setWindowDimensions(getWindowDimensions());
+      }
+  
+      window.addEventListener('resize', handleResize);
+      return () => window.removeEventListener('resize', handleResize);
+    }, []);
+  
+    return windowDimensions;
+  }
+
+  const { height, width } = useWindowDimensions();
+
+  function calculateDimensions(type, width, height) {
+  
+    const w_factor = (width * 0.8) / aspectRatios[type].width;
+    const h_factor = (height * 0.8) / aspectRatios[type].height;
+    const factor = Math.min(w_factor, h_factor, 1);
+    console.log("factor: ", factor);
+    console.log("width: ", aspectRatios[type].width * factor);
+    console.log("height: ", aspectRatios[type].height * factor);
+    return {
+      width: aspectRatios[type].width * factor,
+      height: aspectRatios[type].height * factor,
+    };
+
+  }
+
     return (
       <Container>
         <ReactWebcam
@@ -25,7 +69,7 @@ const Webcam = ({ setCapturedImage, type = "landscape"}) => {
           screenshotFormat="image/jpeg"
           videoConstraints={{
             facingMode: "user",
-            ...aspectRatios[type],
+            ...calculateDimensions(type, width, height),
           }}
         >
         {({ getScreenshot }) => (
