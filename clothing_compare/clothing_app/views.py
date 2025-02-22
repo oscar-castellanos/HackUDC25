@@ -12,7 +12,8 @@ import string
 def getImageUrl(image_url):
 
     ## Dummy method while we integrate the actual img upload...
-    image_url = "http://" + "".join(random.choice(string.ascii_letters) for i in range(20))
+    #image_url = "http://" + "".join(random.choice(string.ascii_letters) for i in range(20))
+    image_url = "https://static.zara.net/assets/public/5d1c/c3b3/e8064a30b197/760db88b39af/01618475800-p/01618475800-p.jpg"
 
     return image_url
 
