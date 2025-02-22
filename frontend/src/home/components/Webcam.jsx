@@ -1,4 +1,8 @@
 import ReactWebcam from 'react-webcam';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import Button from 'react-bootstrap/Button';
 
 const aspectRatios = {
   landscape: {
@@ -14,7 +18,7 @@ const aspectRatios = {
 const Webcam = ({ setCapturedImage, type = "landscape"}) => {
 
     return (
-      <div className='webcam'>
+      <Container>
         <ReactWebcam
           mirrored 
           audio={false}
@@ -25,8 +29,11 @@ const Webcam = ({ setCapturedImage, type = "landscape"}) => {
           }}
         >
         {({ getScreenshot }) => (
-        <button 
-          className="capture-btn" 
+
+        <Row>
+        <Col>
+        <Button
+          variant="primary" 
           onClick={() => {
             const imageSrc = getScreenshot();
             setCapturedImage(imageSrc);
@@ -34,10 +41,12 @@ const Webcam = ({ setCapturedImage, type = "landscape"}) => {
           }
         >
           Capture photo
-        </button>
+        </Button>
+        </Col>
+        </Row>
         )}
         </ReactWebcam>
-      </div>
+      </Container>
     );
 }
 

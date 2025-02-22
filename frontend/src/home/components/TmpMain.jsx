@@ -1,5 +1,8 @@
 import { useState, useEffect } from 'react';
 import Webcam from './Webcam';
+import Container from 'react-bootstrap/Container';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
 
 const TmpMain = () => {
   const [capturedImage, setCapturedImage] = useState(null);
@@ -12,13 +15,13 @@ const TmpMain = () => {
     console.log("useEffect called");
     if (capturedImage) {
       console.log("Captured image changed");
-      fetch('http://localhost:8000/clothing_app/', {
+      fetch('http://localhost:8000/clothing_app/user_clothing/Oscar', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({ name: "ImgXXX",
-                                detail: capturedImage.substring(0, 50)}),
+        body: JSON.stringify({ user: "Oscar",
+                                image_string: capturedImage}),
       })
         .then((response) => response.json())
         .then((data) => console.log(data));
@@ -26,9 +29,8 @@ const TmpMain = () => {
   }
   , [capturedImage]);
 
-  return (
-    <main>
-      <h1>Temp Mone</h1>
+  /*
+        <h1>Temp Home</h1>
       <div className="webcam-container">
         {!capturedImage && <Webcam setCapturedImage={setCapturedImage} />}
         {capturedImage && (
@@ -61,6 +63,42 @@ const TmpMain = () => {
           </pre>
         )}
       </div>
+  */
+
+  return (
+    <main>
+      <Container>
+        <Row>
+          <Col>
+            <h1>Temp Home</h1>
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+              {!capturedImage && <Webcam setCapturedImage={setCapturedImage} />}
+              {capturedImage && (
+                <img
+                  src={capturedImage}
+                  alt="Captured"
+                  className="captured-image"
+                />
+              )}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+              {capturedImage && (
+                <p>
+                  Captured Image Size = {(
+                    (capturedImage.length * 3) /
+                    (4 * 1024 * 1024)
+                  ).toFixed(2)} MB
+                </p>
+              )}
+          </Col>
+        </Row>
+      </Container>
+
     </main>
   );
 }
