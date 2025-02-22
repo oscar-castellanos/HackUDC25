@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'react';
 import { ClothingList } from '../../common';
+import Spinner from 'react-bootstrap/Spinner';
 
 
 const CompareCloths = ({clothImageURL}) => {
@@ -31,7 +32,9 @@ const CompareCloths = ({clothImageURL}) => {
   return (
     <>
       <h2>CompareCloths with URL = {clothImageURL}</h2>
-      {!clothData && (<h3>Loading...</h3>)}
+      {!clothData && (
+          <Spinner style={{position: 'absolute', top: '50%', left: '50%', width: '5rem', height: '5rem'}} animation="border" />
+        )}
       {clothData && (
         <ClothingList clothing={clothData} />
       )}
