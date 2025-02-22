@@ -14,8 +14,8 @@ class Clothing_detail(models.Model):
     brand = models.CharField(max_length=20)
     # Scraped data
     color = models.CharField(max_length=20, null=True)
-    description = models.TextField(null=True) # example: {nylon: 55%, cotton: 45%}
-    composition = models.JSONField(null=True)
+    description = models.TextField(null=True)
+    composition = models.JSONField(null=True) # example: {nylon: 55%, cotton: 45%}
     image_url = models.URLField(null=True)
     # Generated data
     score = models.IntegerField(default=-1)
