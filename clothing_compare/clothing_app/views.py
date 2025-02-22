@@ -7,6 +7,8 @@ from . models import *
 
 from .external_apis import visual_finder, tmpfiles
 from . import scraper
+from .external_apis import ollama_llm
+from .external_apis import product_finder
 
 import random
 import string
@@ -128,3 +130,35 @@ class VisualSearch(APIView):
             for detail in full_data]
 
         return Response(detail)
+    
+class OutfitSearch(APIView):
+    
+    ## Get outfit based on Clothing_details
+    def post(self, request):
+        desc = request.data['description']
+        color = request.data['color']
+        
+        ## Get outfits from Ollama
+        ol = ollama_llm.OllamaLLM()
+        outfits, originalPrompt = ol.generate_outfit(desc, color)
+        
+        scrapped_outfits = []
+        
+        for outfit in outfits:
+            # Get the image url for each key in 
+            outfit_parts = outfit["outfit_parts"]
+            scrapped_parts = []
+            for key in outfit_parts.keys():
+                if key == originalPrompt:
+                    # Coger la que nos mandan de base.
+                    continue
+                piece_found = product_finder.product_finder(outfit_parts[key])[0]
+                scrapped_parts.append({key:scraper.get_info(piece_found)})
+            #Identificar cada uno. 
+            scrapped_outfits.append({"description": outfit["description"], "outfit_parts":scrapped_parts})
+        
+        ## No se muy bien como devolverlo, pero supongoq ue será algo así...
+        return Response(scrapped_outfits) 
+            
+        
+            

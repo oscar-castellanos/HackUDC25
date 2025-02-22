@@ -25,3 +25,12 @@ class User_clothing(models.Model):
     user = models.CharField(max_length=20)
     image_string = models.TextField()
     image_url = models.CharField(max_length=500, null=True)
+    
+
+class User_outfit(models.Model):
+    description = models.CharField(max_length=100)
+    top = models.ForeignKey(Clothing_detail, on_delete=models.CASCADE, related_name="top")
+    bottom = models.ForeignKey(Clothing_detail, on_delete=models.CASCADE, related_name="bottom")
+    shoes = models.ForeignKey(Clothing_detail, on_delete=models.CASCADE, related_name="shoes")
+    accesory = models.ForeignKey(Clothing_detail, on_delete=models.CASCADE, related_name="accesory")
+    
