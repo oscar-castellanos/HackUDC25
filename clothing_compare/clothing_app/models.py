@@ -8,16 +8,15 @@ class Clothing_detail(models.Model):
     clothing_id = models.CharField(max_length=20)
     name = models.CharField(max_length=50)
     price_currency = models.CharField(max_length=5)
-    price_current = models.CharField()
-    price_original = models.CharField()
-    #link = models.CharField(max_length=100)
+    price_current = models.CharField(max_length=10)
+    price_original = models.CharField(max_length=10, null=True)
     link = models.URLField()
     brand = models.CharField(max_length=20)
     # Scraped data
-    color = models.CharField(max_length=20)
-    description = models.TextField() # example: {nylon: 55%, cotton: 45%}
+    color = models.CharField(max_length=20, null=True)
+    description = models.TextField(null=True) # example: {nylon: 55%, cotton: 45%}
     composition = models.JSONField(null=True)
-    image_url = models.URLField()
+    image_url = models.URLField(null=True)
     # Generated data
     score = models.IntegerField(default=-1)
 

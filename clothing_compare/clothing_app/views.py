@@ -5,14 +5,12 @@ from rest_framework import status
 from . serializer import *
 from . models import *
 
-import random
-import string
+from . external_apis import product_finder
 
 ## Aux methods:
 def getImageUrl(image_url):
 
     ## Dummy method while we integrate the actual img upload...
-    #image_url = "http://" + "".join(random.choice(string.ascii_letters) for i in range(20))
     image_url = "https://static.zara.net/assets/public/5d1c/c3b3/e8064a30b197/760db88b39af/01618475800-p/01618475800-p.jpg"
 
     return image_url
@@ -97,3 +95,14 @@ class UserClothing(APIView):
 
         image.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+class VisualSearch(APIView):
+
+    def post(self, request):
+
+        image_url = request.data['image_url']
+
+        ## Use image_url to pull from Visual Search
+        found_extra_data = product_finder.product_finder(image_url)
+        return Response(found_extra_data)

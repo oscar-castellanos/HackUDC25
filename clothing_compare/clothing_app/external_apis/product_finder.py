@@ -3,7 +3,8 @@ import json
 import requests
 import os
 
-from clothing_compare.clothing_app.external_apis.authenticator import authenticate
+#from clothing_compare.clothing_app.external_apis.authenticator import authenticate
+from . authenticator import authenticate
 
 URL = "https://api.inditex.com/pubvsearch/products"
 USER = os.environ.get("USER_INDITEX_API")
