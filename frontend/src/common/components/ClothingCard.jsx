@@ -5,7 +5,7 @@ const ClothingCard = ({ clothing }) => {
     <Card>
       <Card.Img variant="top" src={clothing.image} />
       <Card.Body>
-        <Card.Title>{clothing.cloth_name}</Card.Title>
+        <Card.Title>{clothing.name ? clothing.name : clothing.cloth_name ? clothing.cloth_name : "No name..... :"}</Card.Title>
         <Card.Subtitle>{clothing.brand}</Card.Subtitle>
       </Card.Body>
     </Card>
