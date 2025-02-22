@@ -4,13 +4,13 @@ import requests
 import os
 
 #from clothing_compare.clothing_app.external_apis.authenticator import authenticate
-from . authenticator import authenticate
+from .authenticator import authenticate
 
 URL = "https://api.inditex.com/pubvsearch/products"
 USER = os.environ.get("USER_INDITEX_API")
 SECRET = os.environ.get("SECRET_INDITEX_API")
 
-def product_finder(image_url, page=1, perPage=5):
+def visual_finder(image_url, page=1, perPage=5):
     """
     Finds products based on the provided image URL.
     Args:
