@@ -10,3 +10,8 @@ class User_clothing_Serializer(serializers.ModelSerializer):
     class Meta:
         model = User_clothing
         fields = ['user', 'image_string', 'image_url']
+
+class User_wish_Serializer(serializers.ModelSerializer):
+    class Meta:
+        model = User_wish
+        fields = ['clothing_id', 'user', 'name', 'link', 'brand', 'image_url']

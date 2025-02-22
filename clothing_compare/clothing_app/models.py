@@ -20,7 +20,6 @@ class Clothing_detail(models.Model):
     # Generated data
     score = models.IntegerField(default=-1)
 
-
 class User_clothing(models.Model):
     user = models.CharField(max_length=20)
     image_string = models.TextField()
@@ -34,3 +33,10 @@ class User_outfit(models.Model):
     shoes = models.ForeignKey(Clothing_detail, on_delete=models.CASCADE, related_name="shoes")
     accesory = models.ForeignKey(Clothing_detail, on_delete=models.CASCADE, related_name="accesory")
     
+class User_wish(models.Model):
+    clothing_id = models.CharField(max_length=20)
+    user = models.CharField(max_length=20)
+    name = models.CharField(max_length=50)
+    link = models.URLField()
+    brand = models.CharField(max_length=20)
+    image_url = models.URLField(null=True)

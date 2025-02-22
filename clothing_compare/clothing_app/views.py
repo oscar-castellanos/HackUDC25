@@ -101,6 +101,61 @@ class UserClothing(APIView):
         image.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class UserWishlist(APIView):
+  
+    serializer_class = User_wish_Serializer
+
+    ## List all clothes wishlisted by a specific user
+    def get(self, request, username):
+        detail = [ {
+            "id": detail.clothing_id,
+            "user": detail.user,
+            "name": detail.name,
+            "link": detail.link,
+            "brand": detail.brand,
+            "image_url": detail.image_url } 
+            for detail in User_wish.objects.filter(user=username)]
+        return Response(detail)
+
+    ## Wishlist a clothing
+    def post(self, request, username):
+
+        data = request.data.copy()
+        data['user'] = username
+
+        serializer = User_wish_Serializer(data=data)
+        if serializer.is_valid(raise_exception=True):
+            serializer.save()
+            return Response(serializer.data)
+
+
+class UserWish(APIView):
+
+    serializer_class = User_clothing_Serializer
+
+    ## Get a specific image uploaded by a specific user
+    def get(self, request, username, clothing_id):
+        clothing = User_wish.objects.get(clothing_id=clothing_id)
+        user_whishlisted_clothing = {
+            "id": clothing.id,
+            "user": clothing.user,
+            "name": clothing.name,
+            "link": clothing.link,
+            "brand": clothing.brand,
+            "image_url": clothing.image_url
+            }  
+        return Response(user_whishlisted_clothing)
+
+    ## Delete image uploaded by user
+    def delete(self, request, username, clothing_id):
+        try:
+            wish = User_wish.objects.get(clothing_id=clothing_id)
+        except User_wish.DoesNotExist:
+            return Response({"Error": "clothing with id {0} wishlisted by user {1} not found".format(clothing_id, username)}, status=status.HTTP_404_NOT_FOUND)
+
+        wish.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 class ProductSearch(APIView):
 
     ## Get list of clothes matching description
