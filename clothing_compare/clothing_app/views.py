@@ -222,7 +222,7 @@ class OutfitSearch(APIView):
     
     ## Get outfit based on Clothing_details
     def post(self, request):
-        originalRequest = request.data
+        originalRequest = request.data.copy()
         
         desc = originalRequest['description']
         color = originalRequest['color']
@@ -239,7 +239,8 @@ class OutfitSearch(APIView):
             scrapped_parts = []
             for key in outfit_parts.keys():
                 if key == originalPrompt:
-                    scrapped_parts.append({key:originalRequest})
+                    originalRequest['category': key]
+                    scrapped_parts.append(originalRequest)
                 try:
                     piece_found = product_finder.product_finder(outfit_parts[key]["Name"])[0]
                     scrapped_object = scraper.get_info(piece_found)
@@ -255,13 +256,16 @@ class OutfitSearch(APIView):
                         "description": scrapped_object.description,
                         "composition": scrapped_object.composition,
                         "image_url": scrapped_object.image_url,
-                        "score": scrapped_object.score
+                        "score": scrapped_object.score,
+                        "category": key
                     }
-                    scrapped_parts.append({key: scrapped_detail})
+                    scrapped_parts.append(scrapped_detail)
                 except:
                     # TODO: If it fails, it should do something...
-                    scrapped_parts.append({key:outfit_parts[key]})
-            scrapped_outfits.append({"description": outfit["description"], "outfit_parts":scrapped_parts})
+                    aux = outfit_parts.copy()
+                    aux['category'] = key
+                    scrapped_parts.append(aux)
+            scrapped_outfits.append({"description": outfit["description"], "outfit_parts": scrapped_parts})
         
         return Response(scrapped_outfits) 
             
