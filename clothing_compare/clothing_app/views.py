@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from rest_framework import status
 from . serializer import *
 from . models import *
 
@@ -70,7 +71,6 @@ class UserClothings(APIView):
             return Response(serializer.data)
 
 
-## WIP
 ## User clothing (single images uploaded by them)
 class UserClothing(APIView):
 
@@ -78,17 +78,21 @@ class UserClothing(APIView):
 
     ## Get a specific image uploaded by a specific user
     def get(self, request, username, image_id):
-        clothing = User_clothing.objects.filter(user=username, id=image_id)
-        user_uploaded_images = {
+        clothing = User_clothing.objects.get(id=image_id)
+        user_uploaded_image = {
             "id": clothing.id,
             "user": clothing.user, 
-            "image_string": clothing.image_string
+            "image_string": clothing.image_string,
+            "image_url": clothing.image_url
             }  
-        return Response(user_uploaded_images)
+        return Response(user_uploaded_image)
 
-    # ## Delete an image
-    # def delete(self, request, username):
-    #     serializer = User_clothing_Serializer(data=request.data)
-    #     if serializer.is_valid(raise_exception=True):
-    #         serializer.save()
-    #         return Response(serializer.data)
+    ## Delete image uploaded by user
+    def delete(self, request, username, image_id):
+        try:
+            image = User_clothing.objects.get(id=image_id)
+        except User_clothing.DoesNotExist:
+            return Response({"Error": "clothing image with id {0} of user {1} not found".format(image_id, username)}, status=status.HTTP_404_NOT_FOUND)
+
+        image.delete()
+        return Response(status=status.HTTP_204_NO_CONTENT)
