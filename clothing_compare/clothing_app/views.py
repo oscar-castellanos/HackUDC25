@@ -262,6 +262,7 @@ class OutfitSearch(APIView):
                     scrapped_parts.append(scrapped_detail)
                 except:
                     # TODO: If it fails, it should do something...
+                    aux = scrapped_parts.copy()
                     aux2 = dict()
                     for k in aux[key]: aux2[k] = aux[key][k]
                     aux2['category'] = key
