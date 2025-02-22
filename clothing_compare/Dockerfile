@@ -10,4 +10,3 @@ EXPOSE 8000
 COPY . .
 
 CMD ["sh", "start_server.sh", "8000"]
-#ENTRYPOINT ["start_server.sh", "8000"]
