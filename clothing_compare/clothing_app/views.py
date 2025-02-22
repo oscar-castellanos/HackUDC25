@@ -101,6 +101,38 @@ class UserClothing(APIView):
         image.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
+class ProductSearch(APIView):
+
+    ## Get list of clothes matching description
+    ## Need to add description and optionally a brand
+    def get(self, request):
+
+        description = request.GET.get('description', "")
+        brand = request.GET.get('brand', "")
+
+        ## Use image_url to pull from Product Search
+        found_suggestions = product_finder.product_finder(description, brand)
+
+        ## Scrape extra data
+        full_data = [scraper.get_info(result) for result in found_suggestions]
+
+        detail = [ {
+            "id": detail.clothing_id,
+            "name": detail.name,
+            "price_currency": detail.price_currency,
+            "price_current": detail.price_current,
+            "price_original": detail.price_original,
+            "link": detail.link,
+            "brand": detail.brand,
+            "color": detail.color,
+            "description": detail.description,
+            "composition": detail.composition,
+            "image_url": detail.image_url,
+            "score": detail.score }
+            for detail in full_data]
+
+        return Response(detail)
+
 class VisualSearch(APIView):
 
     ## Get similar clothes to an image url embedded into POST request
@@ -154,7 +186,7 @@ class OutfitSearch(APIView):
                 if key == originalPrompt:
                     scrapped_parts.append({key:originalRequest})
                 try:
-                    piece_found = product_finder.product_finder(outfit_parts[key])[0]
+                    piece_found = product_finder.product_finder(outfit_parts[key]["Name"])[0]
                     scrapped_parts.append({key:scraper.get_info(piece_found)})
                 except:
                     # TODO: If it fails, it should do something...
