@@ -291,6 +291,7 @@ class OllamaLLM(metaclass=Singleton):
         It's very important that you try to pick up the colors that they want and the materials.
         Try to simplify the keywords and avoid using too many technical terms.
         You cannot use more than 2 keywords. It's important that you only return the most relevant ones.	
+        The keywords must be 1 word long. This rule cannot be broken nor any other rule must be broken.
         Examples:
         - If the person wants a casual outfit, you should return the word "casual".
         - If the person wants a dress with a floral pattern, you should return the words "dress, floral pattern".
@@ -302,6 +303,19 @@ class OllamaLLM(metaclass=Singleton):
         """
         response = self.generate_text(prompt, system_string)
         
+        if len(response.split(",")) <= 2:
+            tokens = response.split(",")
+            for i, token in enumerate(tokens):
+                if len(token.strip().split(" ")) > 1:
+                    tokens[i] = token.strip().split(" ")[0]
+            response = ", ".join(tokens)
+        else:
+            response = ", ".join(response.split(",")[:2])
+            tokens = response.split(",")
+            for i, token in enumerate(response):
+                if len(token.strip().split(" ")) > 1:
+                    tokens[i] = token.strip().split(" ")[0]
+            response = ",".join(tokens)            
         return response
         
     
