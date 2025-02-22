@@ -16,6 +16,55 @@ class OllamaLLM(metaclass=Singleton):
         self.__model = model
         # Preload selected model
         self.download_ollama_model(self.__model)
+        
+    def __parse_outfit(self, outfit):
+        """
+        Parses a given outfit string into a structured format.
+        The input string is expected to be divided into sections by "#####".
+        Each section represents an outfit and contains lines describing the outfit's details.
+        Args:
+            outfit (str): The string representation of outfits to be parsed.
+        Returns:
+            tuple: A tuple containing:
+                - outfit_list (list): A list of dictionaries, each representing an outfit with its details.
+                - originalPrompt (str or None): The key of the outfit part that does not have a "Category" field, or None if all parts have a "Category".
+        """
+        outfits = outfit.split("#####")[1:]
+        
+        outfit_list = []
+        
+        for outfit in outfits:
+            current_outfit = {}
+            outfit_lines = outfit.split("\n")
+            current_outfit["description"] = outfit_lines[1].strip()
+            outfit_description = outfit_lines[1].strip()
+            current_part_of_outfit = ""
+            for line in outfit_lines[2:]:
+                if line.strip() == "":
+                    continue
+                if line.strip()[0] == "*":
+                    current_part_of_outfit = line.strip()[1:].split(":")[0].strip()
+                    current_outfit[current_part_of_outfit] = {"name": line.strip()[1:].split(":")[1].strip()}
+                if line.strip()[0] == "+":
+                    line = line.strip()[1:]
+                    if len(line.split(":")) == 1:
+                        continue
+                    current_outfit[current_part_of_outfit][line.strip().split(":")[0].strip()] = line.strip().split(":")[1].strip()
+                    ##current_outfit[current_part_of_outfit][line.strip().split(":")[0].strip()] = line.strip().split(":")[1].strip()
+                else:
+                    continue
+            outfit_list.append(current_outfit)
+
+
+        base_outfit = outfit_list[0]
+        # The original prompt will not have Category
+        originalPrompt = None
+        for key in base_outfit.keys():
+            if key != "description":
+                if base_outfit[key].get("Category") is None:
+                    originalPrompt = key
+                    break
+        return outfit_list, originalPrompt
 
     # Download selected model if not existing
     def download_ollama_model(self, selected_model):
@@ -54,3 +103,150 @@ class OllamaLLM(metaclass=Singleton):
 
         # Return message and chain of previous messages
         return (response.message.content, ollama_history)
+    
+    # Generate outfits from the description of a piece of clothing.
+    def generate_outfit(self, description, color=""):
+        system_prompt = f"""
+        You are an outfit generator who gives out recommendations of outfits based on the description and color given. 
+        Even if it's in a different language, do the description in English.
+        You need to provide 5 different and distinct outfits.
+        Each outfit should contain the object described in the prompt and they should match based on fashion rules and color theory.
+        Give a small description of each outfit and separate them by ##### and a line break.
+        For each outfit, provide a description of each piece of clothing and accesory, preceded by the category of the clothing.
+        Each outfit must contain top, bottom, shoes and at least one accessory.
+        If you are not given a color, try to get it from the description or to generate a color that matches the description.
+        If you are not given a description, ignore the prompt and only say "No description provided".
+        
+        The result must be returned in the following format:
+        
+            ##### Outfit 1
+        The outfit starts with a black relaxed fit shirt, made from a blend of viscose and cotton fabrics. The camp collar adds a casual touch to the top, while the short sleeves provide a comfortable fit.
+
+        * Top: Black Relaxed Fit Shirt (Viscose and Cotton Blend)
+                + Description: A casual button-up shirt featuring a camp collar and short sleeves.
+                + Color: Black
+
+        The bottom is a pair of dark blue skinny jeans, providing a sleek contrast to the casual top.
+
+        * Bottom: Dark Blue Skinny Jeans
+                + Category: Pants
+                + Description: Slim-fit jeans with a straight leg and a subtle stretch.
+
+        Black Chelsea boots add a stylish touch to the outfit, completing the relaxed yet polished look.
+
+        * Shoes: Black Chelsea Boots
+                + Category: Shoes
+                + Description: Classic ankle-high boots featuring an elastic side panel and a slip-on design.
+
+        A simple silver necklace adds a pop of elegance to the overall look.
+
+        * Accessory: Silver Necklace
+                + Category: Accessories
+                + Description: A delicate chain necklace featuring a small pendant.
+
+        ##### Outfit 2
+        The outfit starts with the same black relaxed fit shirt, paired with a pair of light gray trousers for a crisp contrast.
+
+        * Top: Black Relaxed Fit Shirt (Viscose and Cotton Blend)
+                + ... (same as before)
+
+        * Bottom: Light Gray Trousers
+                + Category: Pants
+                + Description: Slim-fit trousers featuring a straight leg and a subtle stretch.
+
+        Black dress shoes add a level of sophistication to the outfit, elevating the look from casual to polished.
+
+        * Shoes: Black Dress Shoes
+                + Category: Shoes
+                + Description: Classic black pumps featuring a low heel and a sleek design.
+
+        A simple leather belt completes the outfit, adding a touch of rugged elegance.
+
+        * Accessory: Leather Belt
+                + Category: Accessories
+                + Description: A classic brown leather belt featuring a simple buckle.
+
+        ##### Outfit 3
+        The outfit starts with the same black relaxed fit shirt, paired with a pair of olive green chinos for a bold contrast.
+
+        * Top: Black Relaxed Fit Shirt (Viscose and Cotton Blend)
+                + ... (same as before)
+
+        * Bottom: Olive Green Chinos
+                + Category: Pants
+                + Description: Slim-fit chinos featuring a straight leg and a subtle stretch.
+
+        Black ankle boots add a stylish touch to the outfit, providing a rugged contrast to the green pants.
+
+        * Shoes: Black Ankle Boots
+                + Category: Shoes
+                + Description: Classic ankle-high boots featuring a chunky sole and a lugged design.
+
+        A simple canvas tote bag adds a practical touch to the outfit, completing the casual-chic look.
+
+        * Accessory: Canvas Tote Bag
+                + Category: Accessories
+                + Description: A lightweight canvas tote bag featuring a simple strap and a neutral color.
+
+        ##### Outfit 4
+        The outfit starts with the same black relaxed fit shirt, paired with a pair of navy blue slim-fit pants for a sleek contrast.
+
+        * Top: Black Relaxed Fit Shirt (Viscose and Cotton Blend)
+                + ... (same as before)
+
+        * Bottom: Navy Blue Slim-Fit Pants
+                + Category: Pants
+                + Description: Slim-fit pants featuring a straight leg and a subtle stretch.
+
+        Black loafers add a level of sophistication to the outfit, providing a polished contrast to the relaxed top.
+
+        * Shoes: Black Loafers
+                + Category: Shoes
+                + Description: Classic black loafers featuring a slip-on design and a sleek sole.
+
+        A simple silver watch completes the outfit, adding a touch of elegance.
+
+        * Accessory: Silver Watch
+                + Category: Accessories
+                + Description: A classic watch featuring a leather strap and a minimalist design.
+
+        ##### Outfit 5
+        The outfit starts with the same black relaxed fit shirt, paired with a pair of burgundy skinny jeans for a bold contrast.
+
+        * Top: Black Relaxed Fit Shirt (Viscose and Cotton Blend)
+                + ... (same as before)
+
+        * Bottom: Burgundy Skinny Jeans
+                + Category: Pants
+                + Description: Slim-fit jeans featuring a straight leg and a subtle stretch.
+
+        Black boots add a stylish touch to the outfit, providing a rugged contrast to the bold pants.
+
+        * Shoes: Black Boots
+                + Category: Shoes
+                + Description: Classic ankle-high boots featuring a chunky sole and a lugged design.
+
+        A simple red scarf adds a pop of color to the outfit, completing the edgy-chic look.
+
+        * Accessory: Red Scarf
+                + Category: Accessories
+                + Description: A lightweight scarf featuring a subtle texture and a vibrant red color.
+        
+        """
+        prompt = f"""
+        The description of the outfit is "{description}" and the color is "{color}".
+        Generate 5 different outfits based on this description and color.
+        """
+        response = self.generate_text(prompt, system_prompt)
+        outfits, originalPrompt = self.__parse_outfit(response)
+        
+        return outfits, originalPrompt
+    
+# if __name__ == '__main__':
+
+    ## Example usage of the generate outfit function
+    # ollama_llm = OllamaLLM()
+    # outfit_json, original_prompt = ollama_llm.generate_outfit("Relaxed fit shirt made of a viscose and cotton blend fabric. Camp collar and short sleeves. Button-up front.", "black")
+    
+    # pprint(outfit_json)
+    # print(original_prompt)
