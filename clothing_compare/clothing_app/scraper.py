@@ -2,7 +2,8 @@ import sys
 import json
 import requests
 from bs4 import BeautifulSoup
-from clothing_compare.clothing_app.models import Clothing_detail
+#from clothing_compare.clothing_app.models import Clothing_detail
+from . models import Clothing_detail
 
 ALLOWED_DOMAINS = ["zara.com"]
 

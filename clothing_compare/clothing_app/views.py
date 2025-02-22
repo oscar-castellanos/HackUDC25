@@ -6,6 +6,7 @@ from . serializer import *
 from . models import *
 
 from .external_apis import visual_finder, tmpfiles
+from . import scraper
 
 import random
 import string
@@ -98,13 +99,32 @@ class UserClothing(APIView):
         image.delete()
         return Response(status=status.HTTP_204_NO_CONTENT)
 
-
 class VisualSearch(APIView):
 
+    ## Get similar clothes to an image url embedded into POST request
     def post(self, request):
 
         image_url = request.data['image_url']
 
         ## Use image_url to pull from Visual Search
-        found_extra_data = visual_finder.visual_finder(image_url)
-        return Response(found_extra_data)
+        found_similars = visual_finder.visual_finder(image_url)
+
+        ## Scrape extra data
+        full_data = [scraper.get_info(result) for result in found_similars]
+
+        detail = [ {
+            "id": detail.clothing_id,
+            "name": detail.name,
+            "price_currency": detail.price_currency,
+            "price_current": detail.price_current,
+            "price_original": detail.price_original,
+            "link": detail.link,
+            "brand": detail.brand,
+            "color": detail.color,
+            "description": detail.description,
+            "composition": detail.composition,
+            "image_url": detail.image_url,
+            "score": detail.score }
+            for detail in full_data]
+
+        return Response(detail)

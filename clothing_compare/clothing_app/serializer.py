@@ -4,7 +4,7 @@ from . models import *
 class Clothing_detail_Serializer(serializers.ModelSerializer):
     class Meta:
         model = Clothing_detail
-        fields = ['clothing_id', 'name', 'price_currency', 'price_current', 'link', 'brand']
+        fields = ['clothing_id', 'name', 'price_currency', 'price_current', 'price_original', 'link', 'brand', 'color', 'description', 'composition', 'image_url', 'score']
 
 class User_clothing_Serializer(serializers.ModelSerializer):
     class Meta:
