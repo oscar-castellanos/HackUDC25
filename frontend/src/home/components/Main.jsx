@@ -9,8 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import { ReactTyped } from 'react-typed';
 import Fade from 'react-bootstrap/Fade';
 
-const Main = ({imageURL, setImageURL, userName}) => {
-  const [prompt, setPrompt] = useState("");
+const Main = ({imageURL, setImageURL, userName, prompt, setPrompt}) => {
   const [capturedImage, setCapturedImage] = useState(null);
   const [isStarted, setIsStarted] = useState(false);
   const [isHidden, setIsHidden] = useState(true);
@@ -74,11 +73,11 @@ const Main = ({imageURL, setImageURL, userName}) => {
 
   function startFromPrompt(event) {
     event.preventDefault();
-    const prompt = event.target[0].value;
-    if (!prompt) {
+    const tmp_prompt = event.target[0].value;
+    if (!tmp_prompt) {
       return;
     }
-    setPrompt(prompt);
+    setPrompt(tmp_prompt);
     setIsStarted(true);
     setInfoType("prompt");
   }
@@ -90,11 +89,11 @@ const Main = ({imageURL, setImageURL, userName}) => {
         {!isStarted && (
         <Row>
           <Col>
-            <h3 class="mt-3 mb-5" style={{textAlign: "center"}}>
+            <h3 className="mt-3 mb-5" style={{textAlign: "center"}}>
               Welcome to
             </h3>
             <Fade in={true} appear={true}>
-              <h1 class="mt-3 mb-3" style={{textAlign: "center"}}>
+              <h1 className="mt-3 mb-3" style={{textAlign: "center"}}>
                 MY COOL APP NAME
               </h1>
             </Fade>
@@ -102,20 +101,20 @@ const Main = ({imageURL, setImageURL, userName}) => {
         </Row>
         )}
         {!isStarted && (
-        <div class="shadow-sm p-3 mb-5 bg-white rounded">
+        <div className="shadow-sm p-3 mb-5 bg-white rounded">
           <Row xxs={1} xs={1} sm={1} md={1} lg={1}>
             <Col>
-              <h4 class="mt-5 mb-3" style={{textAlign: "center"}}>
+              <h4 className="mt-5 mb-3" style={{textAlign: "center"}}>
                 <ReactTyped strings={["Start by"]} typeSpeed={50} showCursor={false}/>
               </h4>
             </Col>
             <Col>
-                <Button style={{display: "flex", "align-items": "center", textAlign: "center"}} size="lg" onClick={() => setIsStarted(true)} variant="primary">
+                <Button style={{display: "flex", textAlign: "center"}} size="lg" onClick={() => setIsStarted(true)} variant="primary">
                   📷 Taking a photo
                 </Button>
             </Col>
             <Col>
-              <h4 class="mt-4" style={{textAlign: "center"}}>
+              <h4 className="mt-4" style={{textAlign: "center"}}>
                 or {isHidden ? ". . .": (<ReactTyped strings={["uploading a picture of a cool outfit"]} typeSpeed={50} showCursor={false}/>)}
               </h4>
             </Col>
@@ -124,13 +123,13 @@ const Main = ({imageURL, setImageURL, userName}) => {
               <Form.Group controlId="formFile">
                 <Form.Control type="file" size="lg" accept="image/*" />
               </Form.Group>
-              <Button variant="primary" type="submit" style={{align: "center", "flex-direction": "row"}} size="lg">
+              <Button variant="primary" type="submit" style={{align: "center"}} size="lg">
                 Start  📁
               </Button>
               </Form>
             </Col>
             <Col>
-              <h4 class ="mt-4" style={{textAlign: "center"}}>
+              <h4 className ="mt-4" style={{textAlign: "center"}}>
                 or {isDoubleHidden ? ". . .": (<ReactTyped strings={["describing a style you like"]} typeSpeed={50} showCursor={false}/>)}
               </h4>
             </Col>
@@ -171,7 +170,7 @@ const Main = ({imageURL, setImageURL, userName}) => {
         </Row>
         <Row xs={1} md={1} lg={3}>
           <Col>
-              <Button onClick={() => {navigate("/compare")}} variant="primary">
+              <Button onClick={() => {navigate("/promptSearch")}} variant="primary">
                 Compare fabric
               </Button>
           </Col>
