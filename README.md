@@ -131,4 +131,5 @@ ClothingCompare has still a long way to go we have many more ideas and improveme
 * Add more sustainability metrics.
 * Add web-scraping modules for other webs of the Inditex suite.
 * User account system to save outfits and searches.
-* Local image storage service
+* Local image storage service.
+* Suppport for allergenic filtering, checking the fabrics and showing clothing that they need.
