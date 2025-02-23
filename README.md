@@ -60,7 +60,7 @@ The following ports are exposed externally on the docker deployment, giving acce
 | User interface (frontend) | 8080 |
 
 ### Backend
-Firstly, before introducing the API, we introduce our json result for clothing recovery. Information is added to the results provided by the Inditex API through web-scraping that is performed over the store webpages of the products and it's done natively on Python through the BeautifulSoup package. This information is used to enrich our data and provide a better comparison system, using values such as the materials of the clothing. We've explored the web pages of all of the Inditex brands available on the API. However, due to technical and time limitations, we've only implemented scraping for the Zara website.
+Firstly, before introducing the API, we introduce our json result for clothing retrieval. Information is added to the results provided by the Inditex API through web-scraping that is performed over the store webpages of the products and it's done natively on Python through the BeautifulSoup package. This information is used to enrich our data and provide a better comparison system, using values such as the materials of the clothing. We've explored the web pages of all of the Inditex brands available on the API. However, due to technical and time limitations, we've only implemented scraping for the Zara website.
 For web-scraping Zara websites it is important to indicate that 2 requests are made, one for the initial website, which returns a dummy website with no information. We search for the redirection address and then we make a second request to the server. 
 This way, we can perform the scraping through Beautiful Soup and the request package only without a web browser, allowing for faster data compiling.
 
@@ -91,7 +91,6 @@ We call this struct ClothingDetail and an example can be found below:
     }
 ```
 
-//Aquí deberíamos incluir ejemplos de jsons...
 The services available from the API are:
 * **clothing_app/** -> Allows to add clothing following the ClothingDetail model through a POST request and list all added clothes in the database with a GET request.
 * **clothing_app/user_clothing/\<username>** -> Allows for the viewing of all images that an user has uploaded as a GET request or to upload an image through a POST request. Add \\<image_id> to see only that specific image in a GET Request or remove it through a DELETE request.
@@ -113,6 +112,9 @@ Issues can be filled out in the GitHub page using the templates provided, please
 ## How can you be a part of ClothingCompare?
 You can contribute to ClothingCompare by solving Issues left by the developers or by other members of the community. Please do mind the limitations, advice and rules that these contributions must comply with. They are compiled in the [Contribution](/CONTRIBUTING.md) file. 
 For any security concerns, go to [Security](/SECURITY.md) and follow the instructions within. 
+
+## Git development
+In order to speedup development a Git Trunk based development has been applied throughout the project, as most of the work has been done in quick succession on the 'dev' branch.
 
 ## Current Contributions
 The contributors of this project are the following:
