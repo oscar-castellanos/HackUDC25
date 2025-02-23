@@ -3,7 +3,6 @@ import json
 import requests
 import os
 
-#from clothing_compare.clothing_app.external_apis.authenticator import authenticate
 from .authenticator import authenticate
 
 URL = "https://api.inditex.com/searchpmpa/products"

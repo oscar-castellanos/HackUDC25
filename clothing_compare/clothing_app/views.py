@@ -133,7 +133,7 @@ class UserWish(APIView):
 
     serializer_class = User_clothing_Serializer
 
-    ## Get a specific image uploaded by a specific user
+    ## Get a specific clothing wishlisted by a specific user
     def get(self, request, username, clothing_id):
         clothing = User_wish.objects.get(clothing_id=clothing_id)
         user_whishlisted_clothing = {
@@ -146,7 +146,7 @@ class UserWish(APIView):
             }  
         return Response(user_whishlisted_clothing)
 
-    ## Delete image uploaded by user
+    ## Delete clothing from user's wishlist
     def delete(self, request, username, clothing_id):
         try:
             wish = User_wish.objects.get(clothing_id=clothing_id)
@@ -261,11 +261,7 @@ class OutfitSearch(APIView):
                     }
                     scrapped_parts.append(scrapped_detail)
                 except:
-                    # TODO: If it fails, it should do something...
-                    # aux = outfit_parts.copy()
-                    # aux2 = dict()
-                    # for k in aux[key]: aux2[k] = aux[key][k]
-                    # aux2['category'] = key
+                    # Return invalid data
                     scrapped_detail = {
                         "id": "-1",
                         "name": outfit_parts[key]['Name'],
@@ -336,11 +332,7 @@ class OutfitPhotoSearch (APIView):
                     }
                     scrapped_parts.append(scrapped_detail)
                 except:
-                    # TODO: If it fails, it should do something...
-                    # aux = outfit_parts.copy()
-                    # aux2 = dict()
-                    # for k in aux[key]: aux2[k] = aux[key][k]
-                    # aux2['category'] = key
+                    # Return invalid data 
                     scrapped_detail = {
                         "id": "-1",
                         "name": outfit_parts[key]['Name'],
@@ -383,7 +375,7 @@ class PromptSearch (APIView):
         # Get the suggested products from inditex API
         suggested_products = product_finder.product_finder(keywords)
         
-        #Scrape extra data
+        # Scrape extra data
         full_data = [scraper.get_info(result) for result in suggested_products]
         
         detail = [ {

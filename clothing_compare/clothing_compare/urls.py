@@ -19,6 +19,5 @@ from clothing_app.views import *
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('clothing_app/', ReactView.as_view(), name="something"),
     path('clothing_app/', include('clothing_app.urls')),
 ]
