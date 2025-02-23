@@ -56,7 +56,7 @@ The following ports are exposed externally on the docker deployment, giving acce
 | User interface (frontend) | 8080 |
 
 ### Backend
-Firstly, before introducing the API, we introduce our json result for clothing recovery. Information is added to the results provided by the Inditex API through web-scraping that is performed over the store webpages of the products and it's done natively on Python through the BeautifulSoup package. This information is used to enrich our data and provide a better comparison system, using values such as the materials of the clothing. 
+Firstly, before introducing the API, we introduce our json result for clothing recovery. Information is added to the results provided by the Inditex API through web-scraping that is performed over the store webpages of the products and it's done natively on Python through the BeautifulSoup package. This information is used to enrich our data and provide a better comparison system, using values such as the materials of the clothing. We've explored the web pages of all of the Inditex brands available on the API. However, due to technical and time limitations, we've only implemented scraping for the Zara website.
 For web-scraping Zara websites it is important to indicate that 2 requests are made, one for the initial website, which returns a dummy website with no information. We search for the redirection address and then we make a second request to the server. 
 This way, we can perform the scraping through Beautiful Soup and the request package only without a web browser, allowing for faster data compiling.
 
@@ -100,8 +100,9 @@ The services available from the API are:
 
 Apart from the API, the React webpage provides an easy-to-use reactive and interactive interface that allows for photo uploading, taking of photographies through webcam for the visual endpoints, as well as text-based prompts for text-based endpoints. 
 
-// tempfiles
-The webpage uses tempfiles, 
+#### Image storage
+We've incorporated image uploading capabilities in order to find similar clothes to the one in the image. The Inditex _Visual Search_ API expects an url to an image, and does not support direct upload of images. For this reason, we've decided to use an external temporary file storage solution, [/TMP/FILES](https://tmpfiles.org/). This service allows uploading any file, and retains it for 60 minutes. This allowed us to externallize this functionality, and develop the proof-of-concept of the application faster. However, for privacy and stability reasons, this functionality could be added locally in the future.
+
 ## Issues
 Issues can be filled out in the GitHub page using the templates provided, please be as clear and concise as possible with your issue and one of the mantainers will try to contact you as soon as possible based on the standards and pledges made on our [Contributing](/CONTRIBUTING.md) page.
 
@@ -120,7 +121,8 @@ The contributors of this project are the following:
 The project is licensed under the GPL-3 License. For more details, please refer to the [LICENSE](./LICENSE) file. Additionally, the licenses  the llama models used in testing can also be found in the [LICENSE](./LICENSE) file.
 
 ## What's next for ClothingCompare
-ClothingCompare still hasn't reached its peak and has many more improvements that can be applied. The main points of future work that the current mantainer team has proposed are:
+ClothingCompare has still a long way to go we have many more ideas and improvements that could be applied. The main points of future work that the current mantainer team has proposed are:
 * Add more sustainability metrics.
 * Add web-scraping modules for other webs of the Inditex suite.
 * User account system to save outfits and searches.
+* Local image storage service
