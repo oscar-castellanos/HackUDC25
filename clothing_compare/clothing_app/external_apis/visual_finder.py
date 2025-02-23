@@ -3,7 +3,7 @@ import json
 import requests
 import os
 
-from .authenticator import authenticate
+from .authenticator import Authenticator
 
 URL = "https://api.inditex.com/pubvsearch/products"
 USER = os.environ.get("USER_INDITEX_API")
@@ -21,7 +21,7 @@ def visual_finder(image_url, page=1, perPage=5):
     Raises:
         Exception: If authentication fails or if any request-related errors occur.
     """
-    token = authenticate(USER, SECRET)
+    token = Authenticator().authenticate(USER, SECRET)
     if token is None:
         raise Exception("Authentication failed")
     

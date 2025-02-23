@@ -1,10 +1,13 @@
 import ollama
 import requests
 import base64
+import os
 import pprint
 
-OLLAMA_MODEL = "llama3.2:3b"
-VISUAL_MODEL = "llava:7b"
+from .singleton import Singleton
+
+# OLLAMA_MODEL = os.environ.get("TEXT_MODEL", "llama3.2:3b")
+# VISUAL_MODEL = os.environ.get("VISUAL_MODEL", "llava:7b")
 
 # Utility method to encode an image from a URL to base64 to pass to ollama
 def get_base64_image_from_url(image_url):
@@ -14,18 +17,10 @@ def get_base64_image_from_url(image_url):
     base64_image = base64.b64encode(image_data).decode('utf-8')
     return base64_image
 
-# Singleton class to ensure only one instance of Ollama is created
-class Singleton(type):
-    _instances = {}
-    def __call__(cls, *args, **kwargs):
-        if cls not in cls._instances:
-            cls._instances[cls] = super(Singleton, cls).__call__(*args, **kwargs)
-        return cls._instances[cls]
-
 class OllamaLLM(metaclass=Singleton):
-    def __init__(self, model = OLLAMA_MODEL, visual_model = VISUAL_MODEL):
-        self.__model = model
-        self.__visual_model = visual_model
+    def __init__(self):
+        self.__model = os.environ.get("TEXT_MODEL", "llama3.2:3b")
+        self.__visual_model = os.environ.get("VISUAL_MODEL", "llava:7b")
         self.__ollama = ollama.Client(
             host="http://ollama:11434",
         )

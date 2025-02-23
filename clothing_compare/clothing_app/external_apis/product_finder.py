@@ -3,7 +3,7 @@ import json
 import requests
 import os
 
-from .authenticator import authenticate
+from .authenticator import Authenticator
 
 URL = "https://api.inditex.com/searchpmpa/products"
 USER = os.environ.get("USER_INDITEX_API")
@@ -22,7 +22,7 @@ def product_finder(product_description, brand="", page=1, perPage=5):
     Raises:
         Exception: If authentication fails or if there is an error with the request.
     """
-    token = authenticate(USER, SECRET)
+    token = Authenticator().authenticate(USER, SECRET)
     if token is None:
         raise Exception("Authentication failed")
     
