@@ -94,7 +94,7 @@ const OutfitSearch = ({ currentClothingDetail, setCurrentClothingDetail }) => {
         </Container>
       )}
       {outfitData && (
-        <Container>
+        <Container fluid>
           {outfitData.map((outfit, index) => (
             <OutfitDetails key={index} outfit={outfit.outfit_parts} />
           ))}
