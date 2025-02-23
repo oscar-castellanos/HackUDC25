@@ -45,7 +45,7 @@ const PromptSearch = ({ prompt }) => {
 
   return (
     <>
-      <Container fluid className="text-center">
+      <Container fluid className="text-center mt-5 mb-4">
         <h2>
           {isLoading ? (
             <ReactTyped

@@ -47,7 +47,7 @@ const CompareCloths = ({clothImageURL}) => {
 
   return (
     <>
-      <Container fluid className='text-center'>
+      <Container fluid className='text-center mt-5 mb-4'>
       <h2>
         {isLoading ? <ReactTyped strings={["Loading...", "Please wait...", "Getting things ready...", "Almost there...", "Processing..."]} typeSpeed={30} showCursor={false} loop/> : `Comparation ready!`}
         </h2>
