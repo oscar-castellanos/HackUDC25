@@ -19,8 +19,8 @@ services:
   ollama:
     image: ollama/ollama:latest
     # Expose ollama port for debugging
-    ports:
-      - "11434:11434"
+    # ports:
+    #  - "11434:11434"
     volumes:
       - ./model_data/ollama:/root/.ollama
     restart: unless-stopped
