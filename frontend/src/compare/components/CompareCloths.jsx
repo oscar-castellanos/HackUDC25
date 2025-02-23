@@ -47,15 +47,17 @@ const CompareCloths = ({clothImageURL}) => {
 
   return (
     <>
+      {!currentClothingDetail && (
       <Container fluid className='text-center mt-5 mb-4'>
       <h2>
         {isLoading ? <ReactTyped strings={["Loading...", "Please wait...", "Getting things ready...", "Almost there...", "Processing..."]} typeSpeed={30} showCursor={false} loop/> : `Comparation ready!`}
         </h2>
       </Container>
+      )}
       {!clothData && isLoading && (
           <Spinner style={{position: 'absolute', top: '50%', left: '50%', width: '5rem', height: '5rem'}} animation="border" />
         )}
-      {(!clothData && !isLoading) && (
+      {(!currentClothingDetail  && !clothData && !isLoading) && (
         <Container fluid className='text-center'>
         <h3>No clothing found for the current image!</h3>
         </Container>)}  

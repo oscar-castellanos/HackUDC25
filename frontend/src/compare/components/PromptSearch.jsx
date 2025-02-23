@@ -45,6 +45,7 @@ const PromptSearch = ({ prompt }) => {
 
   return (
     <>
+    {!currentClothingDetail && (
       <Container fluid className="text-center mt-5 mb-4">
         <h2>
           {isLoading ? (
@@ -65,6 +66,7 @@ const PromptSearch = ({ prompt }) => {
           )}
         </h2>
       </Container>
+      )}
       {!clothData && isLoading && (
         <Spinner
           style={{
@@ -77,7 +79,7 @@ const PromptSearch = ({ prompt }) => {
           animation="border"
         />
       )}
-      {!clothData && !isLoading && (
+      {!currentClothingDetail && !clothData && !isLoading && (
         <Container fluid className="text-center">
           <h3>No clothing found for the current image!</h3>
         </Container>
