@@ -23,7 +23,7 @@ const Header = () => {
             <Nav className="me-auto">
               <Nav.Link as={Link} to="/" >Home</Nav.Link>
               <Nav.Link as={Link} to="/favorites">Favorites</Nav.Link>
-              <Nav.Link as={Link} to="/historial">Historial</Nav.Link>
+              <Nav.Link as={Link} to="/history">History</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

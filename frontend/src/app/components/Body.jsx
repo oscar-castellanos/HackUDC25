@@ -19,7 +19,7 @@ const Body = () => {
         <Route path="/compare" element={<CompareCloths clothImageURL={imageURL}/>} />
         <Route path="/promptSearch" element={<PromptSearch prompt={prompt}/>} />
         <Route path="/favorites" element={<Favorites/>} />
-        <Route path="/historial" element={<Historial/>} />
+        <Route path="/history" element={<Historial/>} />
       </Routes>
     </main>
   );

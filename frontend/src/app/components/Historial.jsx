@@ -3,7 +3,7 @@ const Historial = () => {
 
   return (
     <div>
-      <h1>Historial</h1>
+      <h1>History</h1>
       <p>Here is a list of your favorite movies:</p>
       <ul>
         <li>Movie 1</li>
