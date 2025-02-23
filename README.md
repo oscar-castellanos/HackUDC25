@@ -36,7 +36,11 @@ Once the containers are up and running a series of API Rest will be available to
 
 The web portal can be accessed through the port 8080 while the API Rest can be accessed through port 8000.
 
-Firstly, before introducing the API, we introduce our json result for clothing recovery. Information is added to the results provided by the Inditex API through web-scraping that is performed over the store webpages of the products and it's done natively on Python through the BeautifulSoup package. This information is used to enrich our data and provide a better comparison system, using values such as the materials of the clothing. We call this struct ClothingDetail and an example can be found below:
+Firstly, before introducing the API, we introduce our json result for clothing recovery. Information is added to the results provided by the Inditex API through web-scraping that is performed over the store webpages of the products and it's done natively on Python through the BeautifulSoup package. This information is used to enrich our data and provide a better comparison system, using values such as the materials of the clothing. 
+For web-scraping Zara websites it is important to indicate that 2 requests are made, one for the initial website, which returns a dummy website with no information. We search for the redirection address and then we make a second request to the server. 
+This way, we can perform the scraping through Beautiful Soup and the request package only without a web browser, allowing for faster data compiling.
+
+We call this struct ClothingDetail and an example can be found below:
 ```json
 {
         "id": "414956079",
@@ -82,7 +86,8 @@ The webpage uses tempfiles,
 Issues can be filled out in the GitHub page using the templates provided, please be as clear and concise as possible with your issue and one of the mantainers will try to contact you as soon as possible based on the standards and pledges made on our [Contributing](/CONTRIBUTING.md) page.
 
 ## How can you be a part of ClothingCompare?
-You can contribute to ClothingCompare by solving Issues left by the developers or by other members of the community. Please do mind the limitations, advice and rules that these contributions must comply with. They are 
+You can contribute to ClothingCompare by solving Issues left by the developers or by other members of the community. Please do mind the limitations, advice and rules that these contributions must comply with. They are compiled in the [Contribution](/CONTRIBUTING.md) file. 
+For any security concerns, go to [Security](/SECURITY.md) and follow the instructions within. 
 
 ## Current Contributions
 The contributors of this project are the following:
