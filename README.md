@@ -1,9 +1,13 @@
 # ClothingCompare
 
+![ClothingCompareHome](images/Home.png)
+
 ## What is ClothingCompare?
 ClothingCompare is an application that helps users find a suitable outfit or other clothing items according to their preferences. The user can either send a picture of a piece of clothing they like, or describe it in a few words and receive personalized suggestions. Users interact through a web portal based on the React Boostrap and Django REST Frameworks, which provides 2 main services:
 * The comparison of different purchase options with additional metrics such as a calculated sustainability index.
+![Comparison](images/Comparison.png)
 * The suggestion of outfits through image search or a natural language description done through large language model technologies, which help users find items they don't know they want yet.
+![Outfit selection](images/Outfits.png)
 
 This solutions are provided thanks to the InditexTECH REST APIs [VisualSearch](https://developer.inditex.com/apimktplc/web/products/pubapimkt/protocols/REST/apis/visual-search/overview) and [ProductSearch](https://developer.inditex.com/apimktplc/web/products/pubapimkt/protocols/REST/apis/product-search/overview).
 
