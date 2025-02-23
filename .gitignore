@@ -1,1 +1,8 @@
 __pycache__/
+db.sqlite3
+
+# Ollama model data
+model_data/ollama/
+
+# API keys
+.apikeys.env

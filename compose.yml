@@ -1,0 +1,38 @@
+services:
+  backend:
+    build: clothing_compare
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./clothing_compare:/app
+    env_file:
+      - ".apikeys.env"
+      - "models.env"
+  frontend:
+    build: 
+      context: frontend
+      dockerfile: Dockerfile.front.dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./frontend/src:/app/src
+  ollama:
+    image: ollama/ollama:latest
+    # Expose ollama port for debugging
+    # ports:
+    #  - "11434:11434"
+    volumes:
+      - ./model_data/ollama:/root/.ollama
+    restart: unless-stopped
+    env_file:
+      - "models.env"
+    post_start:
+      - command: ["sh", "-c", "ollama pull $${TEXT_MODEL} && ollama pull $${VISUAL_MODEL}"]
+    # Enable GPU support
+    # deploy:
+    #       resources:
+    #         reservations:
+    #           devices:
+    #             - driver: nvidia
+    #               count: 1
+    #               capabilities: [gpu]
