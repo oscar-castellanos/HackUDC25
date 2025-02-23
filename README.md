@@ -1,41 +1,61 @@
 # ClothingCompare
 
 ## What is ClothingCompare?
-ClothingCompare is an application based on the Django REST Framework and React built to provide 2 main services:
+ClothingCompare is an application that helps users find a suitable outfit or other clothing items according to their preferences. The user can either send a picture of a piece of clothing they like, or describe it in a few words and receive personalized suggestions. Users interact through a web portal based on the React Boostrap and Django REST Frameworks, which provides 2 main services:
 * The comparison of different purchase options with additional metrics such as a calculated sustainability index.
 * The suggestion of outfits through image search or a natural language description done through large language model technologies, which help users find items they don't know they want yet.
 
 This solutions are provided thanks to the InditexTECH REST APIs [VisualSearch](https://developer.inditex.com/apimktplc/web/products/pubapimkt/protocols/REST/apis/visual-search/overview) and [ProductSearch](https://developer.inditex.com/apimktplc/web/products/pubapimkt/protocols/REST/apis/product-search/overview).
 
-ClothingCompare can be accessed both as a REST API with a series of endpoints or as a web portal developed in React once the application is deployed and it's deployed with the ease of a command by writing a simple 'docker compose'.
+ClothingCompare can be accessed both as a REST API with a series of endpoints or as a web portal developed in React.
 
-## Dependencies
+## Dependencies and deployment
 ClothingCompare aims to serve as an easy-to-use and deploy application, so the amount of dependencies has been kept as a minimum.
 
 You only need [Docker](https://www.docker.com/) and the credentials needed for the [InditexTECH REST APIs](https://developer.inditex.com/apimktplc/web/home). 
 
 A quickstart guide to creating an application and attaching APIs to it can be found in [this link](https://developer.inditex.com/apimktplc/web/get-started/overview/quickstart).
+This project **requires** adding both the _Product Search_ and the _Visual Search_ APIs.
 
+You will need to set a series of environment variables in your system prior to deploying the Docker infraestructure.
 
-//Explica xian porfa lo de donde están.
-
-You will, however, need to set a series of environment variables in your system prior to composing the Docker containers. They are explained below and can be set in :
+The Inditex API secrets are configured on the `.apikeys.env` file, located on this repository root, as follows:
 * **USER_INDITEX_API->** Your OATH2 Client ID from your application.
 * **SECRET_INDITEX_API->** Your OATH2 Client ID from your application.
-* **TEXT_MODEL->** LLM model for text-based queries.
-* **VISUAL_MODEL->** LLM model for image-based queries.
-
+* **ACCESTOKEN_URL_INDITEX_API->** Your OAuth2 Accesstoken URL. Varies between the API sandbox and production modes.
+You can find an example file `apikeys.example.env` that you can rename to `.apikeys.env` and fill out with your API credentials.
 It's critical that you have your Application promoted to production, the mentioned APIs added to it and authorized to perform requests.
 
-In our case, we have used the llama 3.2 and llava models for testing the application and as such their license is included in our project's [license](/LICENSE).
+The product recommendations and outfit suggestion engine uses Large Language Models (LLMs) run on the Ollama framework. It allows us to download, run, and solve queries locally using any Ollama compatible models. Two different models are used. One for text-to-text, and another for image-to-text queries, and can be configured on the `models.env` environment file.
+* **TEXT_MODEL->** Name of the Ollama LLM model for text-based queries. Defaults to `llama3.2:3b`.
+* **VISUAL_MODEL->** Name of the Ollama LLM model for image-based queries. Defaults to `llava:7b`.
+
+Compatible text models are listed on the following page: [Ollama Models](https://ollama.com/search). In the case of the visual model, only the ones with the "vision" tag are supported: [Ollama Vision Models](https://ollama.com/search?c=vision). The models configured on the `models.env` file are not bundled or distributed with this project, nor have been modified for our purposes. They will be automatically downloaded from the sources listed at the official Ollama repositories on deployment.
+
+By default, this project uses the LLaMA 3.2 and LLaVA models for testing the application. As such their license is included in our project's [license](/LICENSE).
+
+### Docker infraestructure
+The project creates three containers. One for the frontend, one for the backend, and one for the ollama framework. The entire docker infraestructure is defined on the docker-compose `compose.yml` file.
+
+LLMs are quite computationally intensive, and as such, they can be sped up considerably by using a GPU, if available on the system. We've included configuration that allows Nvidia GPUs to accelerate the Ollama framework. This functionality requires the [NVIDIA Container Toolkit](https://docs.nvidia.com/datacenter/cloud-native/container-toolkit/latest/install-guide.html) to be installed. Then, you can enable this functionality by uncommenting the code block prefixed by "Enable GPU Support" on the `compose.yml` file.
+
+The docker infraestructure can then be deployed by running `docker compose up` on the project directory.
 
 ## How does it work?
-//Xian por favor explica como va lo de configurar el Docker.
+ClothingCompare helps users find a suitable outfit or other clothing items according to their preferences. The user can either send a picture of a piece of clothing they like, or describe it in a few words and receive personalized suggestions. Users interact through a web portal developed in React, created with ease-of-use and flexibility in mind. The web portal sends queries via a REST API to a backend service, that uses InditexTECH's _Product Search_ and the _Visual Search_ APIs to obtain product suggestions. Web-scraping techniques are employed to obtain information that is not directly available on the InditexTech API Products, such as the fabric materials and composition used on the different items. The outfit suggestions are powered by LLaMA 3.1, for text-to-text instructions, and LLaVA, for image-to-text extraction, using the Ollama framework.
 
-Once the containers are up and running a series of API Rest will be available to use, as well as a web portal for access to its features.
+### Services
+The backend container runs the main business logic. It exposes a series of REST APIs and orchestrates all the actions of the application, including sending calls and receiving responses to and from the ollama container. It exposes the API through port 8000.
+The frontend container exposes an user interface, allowing easy interaction and visualization with the information provided by the backend. The UI is exposed through port 8080.
+Finally, the ollama framework container is the responsible of running inference on the LLM models.
 
-The web portal can be accessed through the port 8080 while the API Rest can be accessed through port 8000.
+The following ports are exposed externally on the docker deployment, giving access to the different functions:
+| Function | Port |
+|----------|------|
+| REST API Backend | 8000 |
+| User interface (frontend) | 8080 |
 
+### Backend
 Firstly, before introducing the API, we introduce our json result for clothing recovery. Information is added to the results provided by the Inditex API through web-scraping that is performed over the store webpages of the products and it's done natively on Python through the BeautifulSoup package. This information is used to enrich our data and provide a better comparison system, using values such as the materials of the clothing. 
 For web-scraping Zara websites it is important to indicate that 2 requests are made, one for the initial website, which returns a dummy website with no information. We search for the redirection address and then we make a second request to the server. 
 This way, we can perform the scraping through Beautiful Soup and the request package only without a web browser, allowing for faster data compiling.
