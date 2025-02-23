@@ -239,7 +239,7 @@ class OutfitSearch(APIView):
             scrapped_parts = []
             for key in outfit_parts.keys():
                 if key == originalPrompt:
-                    originalRequest['category': key]
+                    originalRequest['category'] = key
                     scrapped_parts.append(originalRequest)
                 try:
                     piece_found = product_finder.product_finder(outfit_parts[key]["Name"])[0]
@@ -310,7 +310,7 @@ class OutfitPhotoSearch (APIView):
             scrapped_parts = []
             for key in outfit_parts.keys():
                 if key == originalPrompt:
-                    data['category': key]
+                    data['category'] = key
                     scrapped_parts.append(data)
                 try:
                     piece_found = product_finder.product_finder(outfit_parts[key]["Name"])[0]
