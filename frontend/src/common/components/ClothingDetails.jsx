@@ -37,7 +37,7 @@ if (typeof composition === 'object' && composition.length > 0) {
   });
 }
 const cardStyle = {
-  height: '90%', // set a fixed height for the entire card
+  height: '100%', // set a fixed height for the entire card
 };
   return (
     <Card className='mb-3' style={cardStyle}>
@@ -83,7 +83,7 @@ const cardStyle = {
             textAlign: 'center', // Justifies the text for a clean look
           }}
         >
-          {description}
+          {description.substring(0, 100) + (description.length > 100 ? '...' : '')}
         </Card.Text>
       </Card.Body>
       <ListGroup
@@ -252,19 +252,26 @@ const cardStyle = {
             ) : (
               <ProgressBar
                 now={score}
-                label={`${score}/100`}
-                variant={
-                  score > 90
-                    ? 'success'
-                    : score > 70
-                    ? 'primary'
-                    : score > 50
-                    ? 'secondary'
-                    : score > 30
-                    ? 'warning'
-                    : 'danger'
-                }
-              />
+                label={score/100}
+                style={{
+                  height: '30px',
+                  borderRadius: '0.375rem',
+                  backgroundColor: '#ddd', // Grey background for contrast
+                }}
+              >
+                <ProgressBar
+                  label={score/100}
+                  now={score}
+                  style={{
+                    backgroundColor: `rgb(${255 - score * 2.55}, ${
+                      score * 2.55
+                    }, 50)`, // Smooth Red to Green transition
+                    color: 'white',
+                    fontWeight: 'bold',
+                    textAlign: 'center',
+                  }}
+                />
+              </ProgressBar>
             )}
           </span>
         </ListGroupItem>

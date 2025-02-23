@@ -6,9 +6,9 @@ import ClothingCard from "./ClothingCard";
 const ClothingList = ({ clothing, setCurrentClothingDetail}) => {
   return (
     <Container fluid>
-      <Row xxs={1} xs={1} sm={1} md={2} lg={5} className="mx-auto">
+      <Row xs={1} sm={1} md={1} lg={2} xxl={2} className="mx-auto">
         {clothing.map((cloth, index) => (
-          <Col key={index} className={"px-3"}>
+          <Col key={index} className={"px-3 py-3"}>
             <ClothingCard key={index} clothing={cloth} setCurrentClothingDetail={setCurrentClothingDetail} />
           </Col>
         ))}
