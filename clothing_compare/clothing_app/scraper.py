@@ -14,15 +14,28 @@ ZARA_DICTIONARY= {
 }
 
 FABRICS_DICTIONARY= {
-    "cotton": 0.2,
-    "viscose": 0.4,
-    "silk": 0.6,
+    "cotton": 0.7,
+    "viscose": 0.9,
+    "silk": 0.9,
     "polyester": 0.8,
     "wool": 1.0,
+    "elastane": 0.6
 }
 
-# Dummy function, to be replaced by an accurate one
+# TODO: Dummy function to be replaced with a serious one. 
 def calculate_score(clothing_result):
+    """
+    Calculate the score of a clothing item based on its material composition.
+
+    Args:
+        clothing_result (object): An object representing the clothing item, which contains a 'composition' attribute.
+                                  The 'composition' attribute is a list of dictionaries, where each dictionary has:
+                                  - "material" (str): The name of the material.
+                                  - "percentage" (int): The percentage of the material in the clothing item.
+
+    Returns:
+        int: The calculated score of the clothing item based on the material composition.
+    """
     score = 0
     for material in clothing_result.composition:
         material_name = material["material"].lower()
@@ -30,6 +43,7 @@ def calculate_score(clothing_result):
         score += material_percentage * FABRICS_DICTIONARY.get(material_name, 0)
     return score
 
+# Get base name for redirection.
 def get_base_name(url):
     from urllib.parse import urlparse
 
@@ -57,6 +71,8 @@ def get_webpage(url):
         raise Exception(f"Failed to retrieve data: {response.status_code}")
 
 
+# The webpage leads to a dummy webpage that is then redirected.
+# This functions searched for the redirect URL and returns the local direction for redirection.
 def obtain_webpage(url):
     # Get the original webpage of the Inditex product
     og_webpage = get_webpage(url)
@@ -74,6 +90,7 @@ def obtain_webpage(url):
     else:
         raise Exception("No redirect found")
 
+# Searches for the representative image of the product in the Zara webpage.
 def get_image_zara(webpage):
     soup = BeautifulSoup(webpage, "html.parser")
     script_tag = soup.find("script", attrs={"type": "application/ld+json"})
@@ -84,6 +101,7 @@ def get_image_zara(webpage):
         image = "Not found"
     return image
 
+# Parses the tags of the webpage and returns a dictionary with the information.
 def parse_tags(webpage, tags, dictionary):
     soup = BeautifulSoup(webpage, "html.parser")
     tag_info = {}
@@ -141,7 +159,38 @@ def get_color_zara(tags):
     
     return color
 
+
 def get_info (vision_result):
+    """
+    Extracts and processes clothing information from a vision result.
+    Args:
+        vision_result (dict): A dictionary containing the vision result with the following structure:
+                "id": str,
+                "name": str,
+                    "currency": str,
+                        "current": float,
+                        "original": float or None
+                "link": str,
+                "brand": str
+    Returns:
+        Clothing_detail: An object containing detailed information about the clothing item, including:
+            - clothing_id (str)
+            - name (str)
+            - price_currency (str)
+            - price_current (float)
+            - price_original (float or None)
+            - link (str)
+            - brand (str)
+            - image_url (str)
+            - color (str)
+            - description (str)
+            - composition (dict)
+            - score (int)
+    Raises:
+        Exception: If no link is provided in the vision result.
+        Exception: If the domain of the link is not allowed.
+        Exception: If the domain of the link is not implemented.
+    """
     """
     Example of Visual Result:
     {
