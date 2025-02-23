@@ -50,7 +50,7 @@ const CompareCloths = ({clothImageURL}) => {
       {!currentClothingDetail && (
       <Container fluid className='text-center mt-5 mb-4'>
       <h2>
-        {isLoading ? <ReactTyped strings={["Loading...", "Please wait...", "Getting things ready...", "Almost there...", "Processing..."]} typeSpeed={30} showCursor={false} loop/> : `Comparation ready!`}
+        {isLoading ? <ReactTyped strings={["Loading...", "Please wait...", "Getting things ready...", "Almost there...", "Processing..."]} typeSpeed={30} showCursor={false} loop/> : `We've found the following matching items:`}
         </h2>
       </Container>
       )}
