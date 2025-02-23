@@ -19,7 +19,12 @@ FABRICS_DICTIONARY= {
     "silk": 0.9,
     "polyester": 0.8,
     "wool": 1.0,
-    "elastane": 0.6
+    "elastane": 0.6,
+    "zinc":1.0,
+    "iron":0.9,
+    "Ag":1.0,
+    "cow leather":0.8,
+    "polyamide": 0.6
 }
 
 # TODO: Dummy function to be replaced with a serious one. 
