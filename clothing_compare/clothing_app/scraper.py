@@ -252,7 +252,7 @@ def get_info (vision_result):
     if not clothing_result.composition:
         clothing_result.score = -1
     else:
-        clothing_result.score = calculate_score(clothing_result)
+        clothing_result.score = int(calculate_score(clothing_result))
         
         
     return clothing_result
